@@ -62,8 +62,10 @@ return (
         
         <button disabled={isLoading} className='shadow-sm py-1.5 px-2 rounded-md outline-slate-300 bg-[--primary] font-semibold text-white hover:opacity-90 disabled:opacity-80' type="submit" >{isLoading && isLoading ?'Loading...':'Sign In'}</button>
         <Oauth/>
-        
-        <h5 className="text-xs">Don&apos;t have an account? <Link className="font-semibold text-[--primary]" to={"/register"}>SignUp</Link></h5>
+        <div className="flex justify-between items-center">
+        <p className="text-xs">Don&apos;t have an account? <Link className="font-semibold text-[--primary]" to={"/register"}>SignUp</Link></p>
+        <Link to={'/forgot-password'} className="text-xs hover:underline text-[--primary]">Forgot password?</Link>
+        </div>
       
       </form>
       {error && <h5 className="text-sm text-center text-red-700">{error}</h5>}

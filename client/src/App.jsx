@@ -8,6 +8,8 @@ import Profile from './pages/Profile'
 import Private from './components/Private'
 import UpdateProfile from './pages/UpdateProfile'
 import UpdatePassword from './pages/UpdatePassword'
+import RestPassword from './pages/RestPassword'
+import ForgotPassword from './pages/ForgotPassword'
 
 
 export const baseURL='http://localhost:3000'
@@ -27,6 +29,8 @@ const App = () => {
     <Route path='/' element={<Home/>}/>
     <Route path='/login' element={<Login/>}/>
     <Route path='/register' element={<Register/>}/>
+    <Route path='/forgot-password' element={<ForgotPassword/>}/>
+    <Route path='/reset-password/:token' element={<RestPassword/>}/>
     <Route path='*' element={<Error/>}/>
     </Routes>
     </>

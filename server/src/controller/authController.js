@@ -1,8 +1,10 @@
 const UserModel = require("../model/userModel");
 const bcrypt=require("bcryptjs");
 const salt = bcrypt.genSaltSync(10);
-const jwt=require('jsonwebtoken')
+const jwt=require('jsonwebtoken');
+const emailWithNodeMailer = require("../helper/email");
 require('dotenv').config()
+const clientURL='http://localhost:5173'
 
 const handleSignUp=async(req,res)=>{
     try {
@@ -187,17 +189,80 @@ const handleUpdatePassword=async(req,res)=>{
 
 const handleForgetPassword=async(req,res)=>{
 try {
-    
+
+  const{email}=req.body;
+  
+  if(!email){
+    return res.status(404).json({success:false,message:"Email not found."})
+  }  
+  
+  const userExist=await UserModel.findOne({email})
+
+  if(!userExist){
+    return res.status(404).json({success:false,message:"This email are not register. Please register first."}) 
+  }
+
+  const token=jwt.sign({id:userExist._id},process.env.JWT_KEY)
+
+  const emailData={
+    email,
+    subject:'Rest password email',
+    html:`
+    <h2>Hello ${userExist.name}</h2>
+    <p>Please click here to <a href="${clientURL}/reset-password/${token}">active your account</a></p>
+    `
+  }
+
+  emailWithNodeMailer(emailData)
+
+  res.status(200).json({success:true,message:`For reset your password go to your email: ${email}`,token})
     
 } catch (error) {
 console.log(error.message)
 }
 }
+
 const handleRestPassword=async(req,res)=>{
 try {
-    
+const {token}=req.params;
+
+if(!token){
+return res.status(404).json({success:false,message:"Rest token not found."})
+}
+
+const decoded=jwt.verify(token,process.env.JWT_KEY)
+
+const userExist=await UserModel.findOne({_id:decoded.id})
+
+if(!userExist){
+    return res.status(404).json({success:false,message:"User not found"})
+}
+
+const {newPassword,confirmPassword}=req.body;
+
+if(!newPassword || !confirmPassword){
+return res.status(400).json({success:false,message:"Fill the required field"})
+}
+
+if(newPassword!==confirmPassword){
+return res.status(400).json({success:false,message:"Confirm password not match"})
+}
+
+const hashedPassword=bcrypt.hashSync(confirmPassword,salt)
+
+const updatePassword=await UserModel.findByIdAndUpdate({_id:userExist._id},{
+    $set:{
+        password:hashedPassword
+    }
+})
+
+const {password:pass,...user}=updatePassword._doc;
+
+res.status(201).json({success:true,message:"Password reset successful.",user})
+   
 } catch (error) {
 console.log(error.message)
+return res.status(500).json({success:false,message:"Confirm password not match"})
 }
 }
 

@@ -54,7 +54,7 @@ const Profile = () => {
               <dt className="text-sm font-medium leading-6 text-gray-900">Gender</dt>
               <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0 capitalize">: {currentUser?.gender}</dd>
             </div>
-            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0 mb-10">
               <dt className="text-sm font-medium leading-6 text-gray-900">Phone</dt>
               <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">: {currentUser?.phone}</dd>
             </div>
