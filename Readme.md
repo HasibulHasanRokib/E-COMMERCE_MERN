@@ -1,39 +1,25 @@
-Welcome to E-Commerce web application.
+<div align='center'><img style="width:30%" src='https://user-images.githubusercontent.com/105128267/218077760-5694a4ac-4e37-4de7-b31f-268ccd27400a.png'/></div>
 
-#Tailwind Css
-#React Js
-#Node Js
-#Express Js
-#MongoDb
-#React Formik
-#Redux toolkit
-#Firebase Auth
+<h2>About the project</h2>
 
-NPM PACKAGES:
+  <p>A <b>car rental</b> website is an online platform that allows users to rent cars for personal or business use. The website provides an easy-to-use interface for searching, comparing, and reserving cars from a wide selection of vehicles that vary in make, model, size, and price.</p>
 
-@Server 
-=>"bcryptjs": "^2.4.3",
-=>"body-parse": "^0.1.0",
-=>"cookie-parser": "^1.4.6",
-=>"cors": "^2.8.5",
-=>"dotenv": "^16.3.1",
-=>"express": "^4.18.2",
-=>"jsonwebtoken": "^9.0.2",
-=>"mongoose": "^8.0.0",
-=> "multer": "^1.4.5-lts.1",
+<p>Credits for the design goes to <a href='https://xpeedstudio.com/'>XpeedStudio</a></p>
 
-@Client
-=>"@reduxjs/toolkit": "^1.9.7",
-=>"axios": "^1.6.2",
-=>"firebase": "^10.6.0",
-=>"formik": "^2.4.5",
-=>"react": "^18.2.0",
-=>"react-dom": "^18.2.0",
-=>"react-icons": "^4.11.0",
-=>"react-redux": "^8.1.3",
-=>"react-router-dom": "^6.18.0",
-=>"react-toastify": "^9.1.3",
-=>"redux-persist": "^6.0.0",
-=>"yup": "^1.3.2"
+👉 Live Demo: <a href='https://car-rental-ten.vercel.app/'>Live Demo</a>
+
+<h3>Build with:</h3>
+
+» Sass / Scss <br>
+» React JS
+
+<h2>Screenshots of the Project 📸</h2>
+<br>
+<h3 align='center'>Home Page 🏡</h3>
+
+<div align='center'>
+<img src='https://user-images.githubusercontent.com/105128267/218077675-f50ac9ae-8d2c-4196-aed8-f4490e142960.png'/>
+
+</div>
 
 
