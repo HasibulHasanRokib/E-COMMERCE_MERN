@@ -3,8 +3,10 @@ const bcrypt=require("bcryptjs");
 const salt = bcrypt.genSaltSync(10);
 const jwt=require('jsonwebtoken');
 const emailWithNodeMailer = require("../helper/email");
+const htmlTemplate = require("../helper/emailView");
 require('dotenv').config()
 const clientURL='http://localhost:5173'
+
 
 const handleSignUp=async(req,res)=>{
     try {
@@ -58,7 +60,7 @@ const handleSignIn=async(req,res)=>{
         return res.status(401).json({success:false,message:"You are block from this site."})  
      }
 
-     const token=jwt.sign({id:userExist._id},process.env.JWT_KEY)
+     const token=jwt.sign({id:userExist._id},process.env.JWT_KEY,{expiresIn:'1h'})
 
      const {password:pass,...user}=userExist._doc;
 
@@ -74,7 +76,7 @@ try {
 const userExist=await UserModel.findOne({email:req.body.email})
 
 if(userExist){
-    const token=jwt.sign({id:userExist._id},process.env.JWT_KEY)
+    const token=jwt.sign({id:userExist._id},process.env.JWT_KEY,{expiresIn:'1h'})
     const{password:pass,...user}=userExist._doc;
     return res.cookie('accessToken',token).json({success:true,message:'Login successful',user})
 }else{
@@ -87,7 +89,7 @@ if(userExist){
         avatar:req.body.avatar
     })
     await newUser.save()
-    const token=jwt.sign({id:newUser._id},process.env.JWT_KEY)
+    const token=jwt.sign({id:newUser._id},process.env.JWT_KEY,{expiresIn:'1h'})
     const{password:pass,...user}=newUser._doc;
     return res.cookie('accessToken',token).json({success:true,message:'Login successful',user})
 }
@@ -202,15 +204,12 @@ try {
     return res.status(404).json({success:false,message:"This email are not register. Please register first."}) 
   }
 
-  const token=jwt.sign({id:userExist._id},process.env.JWT_KEY)
+  const token=jwt.sign({id:userExist._id},process.env.JWT_KEY,{expiresIn:"120s"})
 
   const emailData={
     email,
-    subject:'Rest password email',
-    html:`
-    <h2>Hello ${userExist.name}</h2>
-    <p>Please click here to <a href="${clientURL}/reset-password/${token}">active your account</a></p>
-    `
+    subject:'Forgot password email',
+    html:htmlTemplate(userExist.name,token)
   }
 
   emailWithNodeMailer(emailData)
@@ -229,6 +228,8 @@ const {token}=req.params;
 if(!token){
 return res.status(404).json({success:false,message:"Rest token not found."})
 }
+
+
 
 const decoded=jwt.verify(token,process.env.JWT_KEY)
 
@@ -262,7 +263,7 @@ res.status(201).json({success:true,message:"Password reset successful.",user})
    
 } catch (error) {
 console.log(error.message)
-return res.status(500).json({success:false,message:"Confirm password not match"})
+return res.status(500).json({success:false,message:error.message})
 }
 }
 
