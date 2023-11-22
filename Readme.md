@@ -2,7 +2,7 @@
 
 <h2>About the project</h2>
 
-<p>A <b>E-Commerce web app with Mern stack</b>With a focus on simplicity and clean design, this store prioritizes user experience, making it easy for customers to find and purchase the products they need.</p>
+<p>A <b>E-Commerce web app with Mern stack</b> With a focus on simplicity and clean design, this store prioritizes user experience, making it easy for customers to find and purchase the products they need.</p>
 
 
 
