@@ -1,5 +1,5 @@
 const express=require('express')
-const { handleSignUp,handleSignIn,handleGoogleAuth,handleSignOut ,handleUserUpdate,handleUpdatePassword,handleForgetPassword,handleRestPassword} = require('../controller/authController')
+const { handleSignUp,handleSignIn,handleGoogleAuth,handleSignOut ,handleUserUpdate,handleUpdatePassword,handleForgetPassword,handleRestPassword,handleGetUsers} = require('../controller/authController')
 const { isLoggedIn } = require('../middleware/authMiddleware')
 
 
@@ -13,6 +13,7 @@ router.post('/user/:id',isLoggedIn,handleUserUpdate)
 router.post('/user-password/:id',isLoggedIn,handleUpdatePassword)
 router.post('/forgot-password',handleForgetPassword)
 router.post('/reset-password/:token',handleRestPassword)
+router.get('/users',handleGetUsers)
 
 
 module.exports=router
