@@ -1,39 +1,29 @@
-Welcome to E-Commerce web application.
+<div align='center'><img style="width:30%" src='https://skybuybd.com/_next/static/media/logo.2d8160b9.svg'/></div>
 
-#Tailwind Css
-#React Js
-#Node Js
-#Express Js
-#MongoDb
-#React Formik
-#Redux toolkit
-#Firebase Auth
+<h2>About the project</h2>
 
-NPM PACKAGES:
+<p>A <b>E-Commerce web app with Mern stack</b> With a focus on simplicity and clean design, this store prioritizes user experience, making it easy for customers to find and purchase the products they need.</p>
 
-@Server 
-=>"bcryptjs": "^2.4.3",
-=>"body-parse": "^0.1.0",
-=>"cookie-parser": "^1.4.6",
-=>"cors": "^2.8.5",
-=>"dotenv": "^16.3.1",
-=>"express": "^4.18.2",
-=>"jsonwebtoken": "^9.0.2",
-=>"mongoose": "^8.0.0",
-=> "multer": "^1.4.5-lts.1",
 
-@Client
-=>"@reduxjs/toolkit": "^1.9.7",
-=>"axios": "^1.6.2",
-=>"firebase": "^10.6.0",
-=>"formik": "^2.4.5",
-=>"react": "^18.2.0",
-=>"react-dom": "^18.2.0",
-=>"react-icons": "^4.11.0",
-=>"react-redux": "^8.1.3",
-=>"react-router-dom": "^6.18.0",
-=>"react-toastify": "^9.1.3",
-=>"redux-persist": "^6.0.0",
-=>"yup": "^1.3.2"
+
+👉 Live Demo: <a href='#'>Live Demo</a>
+
+<h3>Build with:</h3>
+
+» Node js <br>
+» Express js <br>
+» MongoDB <br>
+» Tailwind Css <br>
+» Firebase auth <br>
+» React JS
+
+<h2>Screenshots of the Project 📸</h2>
+<br>
+<h3 align='center'>Login Page</h3>
+
+<div align='center'>
+<img src='https://firebasestorage.googleapis.com/v0/b/mern-e-commerce-405107.appspot.com/o/1700642216117Screenshot%202023-11-22%20143017.png?alt=media&token=a631c363-b8eb-4a1d-9071-a35d7f0f0d17'/>
+
+</div>
 
 
