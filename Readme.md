@@ -1,4 +1,4 @@
-<div align='center'><img style="width:30%" src='[https://user-images.githubusercontent.com/105128267/218077760-5694a4ac-4e37-4de7-b31f-268ccd27400a.png](https://firebasestorage.googleapis.com/v0/b/mern-e-commerce-405107.appspot.com/o/1700642216117Screenshot%202023-11-22%20143017.png?alt=media&token=a631c363-b8eb-4a1d-9071-a35d7f0f0d17)'/></div>
+<div align='center'><img style="width:30%" src='https://skybuybd.com/_next/static/media/logo.2d8160b9.svg'/></div>
 
 <h2>About the project</h2>
 
@@ -22,7 +22,7 @@
 <h3 align='center'>Login Page</h3>
 
 <div align='center'>
-<img src='https://user-images.githubusercontent.com/105128267/218077675-f50ac9ae-8d2c-4196-aed8-f4490e142960.png'/>
+<img src='https://firebasestorage.googleapis.com/v0/b/mern-e-commerce-405107.appspot.com/o/1700642216117Screenshot%202023-11-22%20143017.png?alt=media&token=a631c363-b8eb-4a1d-9071-a35d7f0f0d17'/>
 
 </div>
 
