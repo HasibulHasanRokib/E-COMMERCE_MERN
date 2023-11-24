@@ -2,6 +2,7 @@ import {FaSistrix,FaCartShopping,FaCircleUser,FaHeart,FaHouseChimney , FaBars } 
 import {  useSelector } from "react-redux"
 import { Link, } from "react-router-dom"
 import 'react-toastify/dist/ReactToastify.css';
+import { AiOutlineAppstore  } from "react-icons/ai";
 
 const Navbar = () => {
 const {currentUser}=useSelector((state)=>state.user)
@@ -9,11 +10,21 @@ const {currentUser}=useSelector((state)=>state.user)
   return (
     <>
      <header className="flex max-md:flex-col  justify-between items-center py-4 px-8 bg-[--primary] shadow-md">
-     <Link to={'/'}> <img className="md:w-24 w-12" src="https://skybuybd.com/_next/static/media/logo.2d8160b9.svg" alt="" /></Link>
-      <form className="border max-md:my-2 bg-[--secondary] flex items-center justify-between rounded-md ">
+        <Link to={'/'}> <img className="md:w-24 w-12" src="https://skybuybd.com/_next/static/media/logo.2d8160b9.svg" alt="" /></Link>    
+        {currentUser && currentUser.isAdmin === true ? (
+        <div className="flex gap-4 items-center">
+        <Link to={'/admin/add-product'} className="text-white font-bold"><AiOutlineAppstore  className="text-2xl"/></Link>
+        <div className="flex items-center">
+            <Link to={'/profile'}>
+            <img className="w-8 h-8 rounded-full shadow-sm object-cover" title="profile" src={currentUser.avatar}  alt="avatar" />
+            </Link>
+        </div>
+        </div>):(
+          <>
+          <form className="border max-md:my-2 bg-[--secondary] flex items-center justify-between rounded-md ">
           <input type="search" placeholder="Search products" className="px-3 bg-[--secondary] outline-none py-1.5 md:w-[20rem] rounded-md"/>
           <button><FaSistrix className="inline-block text-gray-700 text-xl w-10"/></button>
-      </form>
+        </form>
         <ul className="flex md:gap-4 items-center max-md:hidden">
           <li title="Cart">
           <a href="#"><FaCartShopping className="text-2xl  text-[--secondary] mx-3"/></a>
@@ -37,13 +48,9 @@ const {currentUser}=useSelector((state)=>state.user)
             </li>
           )}           
         </ul>
-     
-       </header> 
+  {/* mobile navbar */}
 
-
-       {/* mobile navbar */}
-
-       <div className="md:hidden py-2 bg-white shadow-md border  w-full bottom-0 fixed  flex justify-center items-center rounded-md">
+  <div className="md:hidden py-2 bg-white shadow-md border  w-full bottom-0 fixed  flex justify-center items-center rounded-md">
        <ul className="flex items-center justify-center px-5 gap-2">
         
           <li title="Category">
@@ -77,6 +84,13 @@ const {currentUser}=useSelector((state)=>state.user)
           )}           
         </ul>
        </div>
+          </>
+        )
+        }
+       </header> 
+
+
+     
     </>
   )
 }

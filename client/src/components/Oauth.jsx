@@ -29,7 +29,6 @@ const navigate=useNavigate()
         credentials:"include"   
       })
       const data=await res.json()
-      console.log(data)
       if(data.success===true){
       dispatch(GET_REQUEST_SUCCESS(data.user))
       navigate('/')
