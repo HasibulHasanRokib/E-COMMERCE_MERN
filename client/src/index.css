@@ -12,3 +12,16 @@
         @apply text-gray-600 bg-[--secondary];
     }
 }
+@layer components{
+    
+}
+
+.slick-next {
+    @apply right-[18px]  z-50;
+}
+.slick-prev {
+    @apply left-[11px] z-50;
+}
+.slick-dots{
+    @apply bottom-[18px];
+}

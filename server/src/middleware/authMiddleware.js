@@ -1,5 +1,6 @@
 const jwt=require('jsonwebtoken');
 require('dotenv').config()
+const UserModel=require('../model/userModel')
 
 const isLoggedIn=(req,res,next)=>{
 try {
@@ -17,6 +18,7 @@ try {
  }
  
  req.userId=decoded.id
+ 
  next()
 
 } catch (error) {
@@ -24,4 +26,16 @@ try {
 }
 }
 
-module.exports={isLoggedIn}
+const isAdmin=async(req,res,next)=>{
+   try {
+     const adminExist= await UserModel.findOne({_id:req.userId})
+     if(adminExist.isAdmin===false){
+      return res.status(403).json({success:false,message:"Only admin can access this."})
+     }
+     next()
+   } catch (error) {
+      console.log(error.message)
+   }
+}
+
+module.exports={isLoggedIn,isAdmin}

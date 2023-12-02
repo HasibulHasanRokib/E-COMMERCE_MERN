@@ -1,7 +1,6 @@
 import {FaSistrix,FaCartShopping,FaCircleUser,FaHeart,FaHouseChimney , FaBars } from "react-icons/fa6"
 import {  useSelector } from "react-redux"
 import { Link, } from "react-router-dom"
-import 'react-toastify/dist/ReactToastify.css';
 import { AiOutlineAppstore  } from "react-icons/ai";
 
 const Navbar = () => {
@@ -9,29 +8,58 @@ const {currentUser}=useSelector((state)=>state.user)
 
   return (
     <>
-     <header className="flex max-md:flex-col  justify-between items-center py-4 px-8 bg-[--primary] shadow-md">
-        <Link to={'/'}> <img className="md:w-24 w-12" src="https://skybuybd.com/_next/static/media/logo.2d8160b9.svg" alt="" /></Link>    
+    
         {currentUser && currentUser.isAdmin === true ? (
-        <div className="flex gap-4 items-center">
-        <Link to={'/admin/add-product'} className="text-white font-bold"><AiOutlineAppstore  className="text-2xl"/></Link>
-        <div className="flex items-center">
+        <div className="flex items-center py-2.5 justify-between border px-6 shadow-md">
+        <Link to={'/'}> <img className="md:w-20 w-12" src="https://skybuybd.com/_next/static/media/logo.2d8160b9.svg" alt="" /></Link>    
+        <div className="flex items-center gap-3">
+            <Link to={'/admin/products'} className="font-bold"><AiOutlineAppstore  className="text-2xl"/></Link>
             <Link to={'/profile'}>
             <img className="w-8 h-8 rounded-full shadow-sm object-cover" title="profile" src={currentUser.avatar}  alt="avatar" />
             </Link>
         </div>
         </div>):(
           <>
-          <form className="border max-md:my-2 bg-[--secondary] flex items-center justify-between rounded-md ">
-          <input type="search" placeholder="Search products" className="px-3 bg-[--secondary] outline-none py-1.5 md:w-[20rem] rounded-md"/>
-          <button><FaSistrix className="inline-block text-gray-700 text-xl w-10"/></button>
-        </form>
-        <ul className="flex md:gap-4 items-center max-md:hidden">
+          <header className="flex max-md:flex-col  justify-between md:items-center py-4 px-8  shadow-md z-50 border-b-2">
+          <div className="flex justify-between items-center">
+          <Link to={'/'}> <img className="w-24" src="https://skybuybd.com/_next/static/media/logo.2d8160b9.svg" alt="" /></Link>    
+          
+          <ul className="flex items-center gap-4 md:hidden">
           <li title="Cart">
-          <a href="#"><FaCartShopping className="text-2xl  text-[--secondary] mx-3"/></a>
+          <a href="#"><FaCartShopping className="text-xl"/></a>
           </li>
 
           <li title="WhishList">
-          <a href="#"><FaHeart className="text-2xl  text-[--secondary] mx-3"/></a>
+          <a href="#"><FaHeart className="text-xl"/></a>
+          </li>
+            {currentUser && currentUser ? (
+            <div className="flex items-center">
+            <Link to={'/profile'}>
+            <img className="md:w-8 md:h-8 w-6 h-6 rounded-full shadow-sm object-cover" title="profile" src={currentUser.avatar}  alt="avatar" />
+            </Link>
+            </div>
+            ):(
+            <li title="Sign in">
+            <Link to={'/login'}>
+            <FaCircleUser className="text-xl"/>
+            </Link>
+            </li>
+          )}  
+          </ul>
+          </div>
+
+          <form className="border max-md:my-2 shadow-sm flex items-center justify-between rounded-md ">
+          <input type="search" placeholder="Search products" className="px-3  outline-none py-1.5 md:w-[20rem] w-full rounded-md"/>
+          <button><FaSistrix className="inline-block text-gray-700 text-xl w-10 "/></button>
+          </form>
+
+          <ul className="flex md:gap-4 items-center max-md:hidden">
+          <li title="Cart">
+          <a href="#"><FaCartShopping className="text-2xl mx-3"/></a>
+          </li>
+
+          <li title="WhishList">
+          <a href="#"><FaHeart className="text-2xl mx-3"/></a>
           </li>
             
           {currentUser && currentUser ? (
@@ -43,14 +71,26 @@ const {currentUser}=useSelector((state)=>state.user)
             ):(
             <li title="Sign in">
             <Link to={'/login'}>
-            <FaCircleUser className="text-2xl text-[--secondary] mx-3"/>
+            <FaCircleUser className="text-2xl mx-3"/>
             </Link>
             </li>
           )}           
         </ul>
+
+       </header> 
+      </>
+        )
+        }    
+    </>
+  )
+}
+
+export default Navbar
+
+
   {/* mobile navbar */}
 
-  <div className="md:hidden py-2 bg-white shadow-md border  w-full bottom-0 fixed  flex justify-center items-center rounded-md">
+        {/* <div className="md:hidden py-2 bg-white shadow-md border  w-full bottom-0 fixed  flex justify-center items-center rounded-md">
        <ul className="flex items-center justify-center px-5 gap-2">
         
           <li title="Category">
@@ -83,16 +123,4 @@ const {currentUser}=useSelector((state)=>state.user)
             </li>
           )}           
         </ul>
-       </div>
-          </>
-        )
-        }
-       </header> 
-
-
-     
-    </>
-  )
-}
-
-export default Navbar
+       </div> */}

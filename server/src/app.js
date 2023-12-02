@@ -3,6 +3,9 @@ const bodyParser=require('body-parser')
 const cors=require('cors')
 const cookieParser=require('cookie-parser')
 const authRouter=require('./router/authRouter')
+const categoryRouter = require('./router/categoryRouter')
+const productRouter=require('./router/productRouter')
+const bannerRouter = require('./router/bannerRouter')
 
 
 
@@ -20,6 +23,9 @@ app.get('/',(req,res)=>{
 })
 
 app.use('/auth',authRouter)
+app.use('/api/categories',categoryRouter)
+app.use('/api',productRouter)
+app.use('/api/banner',bannerRouter)
 
 //router error
 app.use((req,res,next)=>{

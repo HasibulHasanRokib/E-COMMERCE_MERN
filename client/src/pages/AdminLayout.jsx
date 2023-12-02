@@ -4,7 +4,7 @@ import Sidebar from "../components/Sidebar"
 
 const AdminLayout = () => {
   return (
-    <main className="flex gap-4">
+    <main className="flex gap-1 md:gap-4">
     <Sidebar/>
     <Outlet/>
     </main>

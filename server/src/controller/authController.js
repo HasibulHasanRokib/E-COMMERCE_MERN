@@ -300,6 +300,7 @@ const handleGetUsers = async (req, res) => {
             users,
             pagination: {
                 totalPages: Math.ceil(count / limit),
+                count,
                 currentPage: page,
                 previousPage: page - 1 > 0 ? page - 1 : null,
                 nextPage: page + 1 <= Math.ceil(count / limit) ? page + 1 : null
