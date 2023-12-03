@@ -4,7 +4,7 @@ const ProductCard = ({product}) => {
   return (
   <>
 <article className="bg-white border md:w-[200px] w-[170px] relative  text-center  hover:shadow-md  px-2 py-6 flex flex-col justify-between items-center rounded h-full">
-<Link className="flex flex-col justify-between items-center w-full" to={`/product/${product._id}`}>
+<Link className="flex flex-col justify-between items-center w-full" to={`/product/${product.slug}`}>
 <div className="absolute top-0 right-0">
 {product.discountPercentage && product.discountPercentage > 0 ?(
   <p className="text-xs duration-300 h-5 px-1 bg-[--primary] text-white rounded-l rounded-tr">{product.discountPercentage}% OFF</p>

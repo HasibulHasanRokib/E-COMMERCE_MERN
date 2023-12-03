@@ -98,7 +98,7 @@ const handleProductDelete=async(id)=>{
             <td className='flex justify-center py-1 border h-14'>
               <img className='w-10' src={item.imageUrls[0]} alt="" />
             </td>             
-             <td className='border capitalize hover:underline text-sm text-start px-2'><Link to={`/product/${item._id}`}>{item.title.slice(0,30)} </Link></td>            
+             <td className='border capitalize hover:underline text-sm text-start px-2'><Link to={`/product/${item.slug}`}>{item.title.slice(0,30)} </Link></td>            
              <td className='border text-sm max-md:hidden'>{item.regularPrice}</td>
              <td className='border text-sm max-md:hidden'>{item.brand}</td>
              <td className='border text-sm max-md:hidden'>{item.rating}</td>

@@ -1,13 +1,13 @@
 import { Outlet } from "react-router-dom"
-import Menu from "../components/Menu"
+import Menu from "./Menu"
 
 
 
 const ProductsLayout = () => {
   return (
     <main className="flex gap-4">
-    <Menu/>
-    <Outlet/>
+      <Menu />
+      <Outlet />
     </main>
   )
 }

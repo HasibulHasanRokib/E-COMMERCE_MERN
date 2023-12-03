@@ -137,7 +137,7 @@ const dispatch=useDispatch()
       <select onChange={handleChange} id="category" name="category" className='p-1.5 rounded-md outline-[--primary] shadow-sm' >
         <option value=''></option>
         {categoryData && categoryData.map((item)=>{
-          return <option className=' capitalize' key={item._id} value={item._id}>{item.slug}</option>
+          return <option className=' capitalize' key={item._id} value={item.slug}>{item.slug}</option>
         })}
        
       </select>      

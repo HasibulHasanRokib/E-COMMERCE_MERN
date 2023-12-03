@@ -35,12 +35,13 @@ const getCategory=async()=>{
 
 const getProduct=async()=>{
     try {
-      const res = await fetch(`${baseURL}/api/product/${id}`,{
+      const res = await fetch(`${baseURL}/api/single-product/${id}`,{
       method:"GET",
       credentials:"include"
       })
       const data = await res.json()
-      setFormData(data.product)
+      setFormData(data.productInfo)
+      console.log(data.product)
     } catch (error) {
       console.log(error.message)
     }
@@ -118,7 +119,7 @@ const getProduct=async()=>{
       setIsError(data.message)
       }else{
         setIsLoading(false)
-        navigate(`/product/${data.updateProduct._id}`)
+        navigate(`/product/${data.updateProduct.slug}`)
       }
 
     } catch (error) {

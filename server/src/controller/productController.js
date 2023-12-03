@@ -75,14 +75,31 @@ const handleGetProducts=async(req,res)=>{
 
 const handleGetProduct=async(req,res)=>{
     try {
-        const {id} = req.params;
-        const product= await ProductModel.findOne({_id:id})
+        const {slug} = req.params;
+        const product= await ProductModel.findOne({slug:slug})
 
         if(!product){
             return res.status(404).json({success:false,message:"Product not found."})
         }
 
         res.status(201).json({success:true,message:"Product return.",product})
+
+    } catch (error) {
+        console.log(error.message)
+        return res.status(500).json({success:false,message:error.message})
+    }
+}
+const handleGetProductById=async(req,res)=>{
+    try {
+        const { id } = req.params;
+
+        const productInfo=await ProductModel.findOne({_id:id})
+
+        if(!productInfo){
+            return res.status(404).json({success:false,message:"Product not found."})
+        }
+
+        res.status(200).json({success:true,message:"Product return.",productInfo})
 
     } catch (error) {
         console.log(error.message)
@@ -154,4 +171,4 @@ const handleNewArrivals=async(req,res)=>{
     }
 }
 
-module.exports = { handleCreateProduct,handleGetProducts,handleGetProduct,handleUpdateProduct,handleDeleteProduct ,handleNewArrivals}
+module.exports = { handleCreateProduct,handleGetProducts,handleGetProduct,handleUpdateProduct,handleDeleteProduct ,handleNewArrivals,handleGetProductById}

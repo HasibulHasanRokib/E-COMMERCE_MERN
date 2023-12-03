@@ -10,13 +10,13 @@ const[product,setProduct]=useState()
 const [imageIndex,setImageIndex]=useState(0)
 const [count,setCount]=useState(1)
 
-const {id} = useParams()
+const {slug} = useParams()
 
 const getProduct=async()=>{
   try {
-    const res = await fetch(`${baseURL}/api/product/${id}`,{
+    const res = await fetch(`${baseURL}/api/product/${slug}`,{
     method:"GET",
-    credentials:"include"
+    // credentials:"include"
     })
     const data = await res.json()
     setProduct(data.product)
