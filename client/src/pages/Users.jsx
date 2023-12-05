@@ -7,6 +7,8 @@ const Users = () => {
   const [searchValue,setSearchValue]=useState("")
   const [page,setPage]=useState(1)
   const [pageInfo,setPageInfo]=useState()
+  const [isLoading,setIsLoading]=useState(false)
+  const [isError,setIsError]=useState(false)
 
 
   const handleSearch=(e)=>{
@@ -17,15 +19,24 @@ const Users = () => {
 
   const getAllUsers=async()=>{
     try {
+    setIsLoading(true)
     const res=await fetch(userURL,{
       method:"GET",
       credentials:"include"
     })
     const data=await res.json()
-    setUserInfo(data.users) 
-    setPageInfo(data.pagination)
+    if(data.success===false){
+      setIsError(data.message)
+      setIsLoading(false)
+    }else{
+      setUserInfo(data.users) 
+      setPageInfo(data.pagination)
+      setIsLoading(false)
+    }
+    
     } catch (error) {
-    console.log(error.message)    
+    setIsError(error.message) 
+    setIsLoading(false)
     }
   }
 
@@ -74,7 +85,10 @@ const Users = () => {
           })}
         </tbody>
        </table>
-        
+
+       {isLoading ? <h5 className='my-10 font-bold text-sky-600'>Loading...</h5>:null}
+       {isError ? <h5 className='my-10 text-center font-semibold text-red-600 text-sm'>{isError}</h5>:null}
+       
        <div className="flex  flex-col mt-4 max-md:justify-center max-md:items-center">
             <h5 className=" text-xs font-semibold">Showing {pageInfo?.currentPage} to {pageInfo?.totalPages} of {pageInfo?.count} Entries</h5>
             <div className="flex gap-3 mt-1">

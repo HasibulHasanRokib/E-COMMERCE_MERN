@@ -14,7 +14,7 @@ const ProductCard = ({product}) => {
 <img alt="" className="" src={product.imageUrls[0]} />
 </figure>
 <p className=" text-sm mt-5 px-3">{product?.title.slice(0,18)}</p>
-<p className=" text-tiny my-2  duration-300">{product?.regularPrice}৳<del className="ml-2 text-xs">৳120000</del></p>
+<p className=" text-tiny my-2  duration-300">Tk.{product?.regularPrice}</p> {/*<del className="ml-2 text-xs">৳120000</del>*/}
 </Link>
 </article>
   </>

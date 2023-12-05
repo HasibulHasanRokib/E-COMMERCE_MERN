@@ -38,19 +38,19 @@ const handleGetProducts=async(req,res)=>{
         const limit = Number(req.query.limit) || 100;
 
         const searchRegExp = new RegExp('.*' + search + '.*', 'i')
+      
 
-        const filter = {
-            
-            $or: [
-                { title: { $regex: searchRegExp } },               
-            ]
+        const filter = {  
+            $or:[
+                { title: { $regex: searchRegExp }, }
+            ]                   
         }
 
         const products = await ProductModel.find(filter).limit(limit).skip((page - 1) * limit)
 
         const count = await ProductModel.find(filter).countDocuments()
 
-        if (!products) {
+        if (products.length===0) {
             return res.status(404).json({ success: false, message: "No products found." })
         }
 
@@ -69,10 +69,10 @@ const handleGetProducts=async(req,res)=>{
 
     } catch (error) {
         console.log(error.message)
-        return res.status(500).json({success:false,message:error.message})
+        return res.status(500).json({success:false,message:"Internal Server Error",error:error.message})
     }
 }
-
+ 
 const handleGetProduct=async(req,res)=>{
     try {
         const {slug} = req.params;
@@ -171,4 +171,20 @@ const handleNewArrivals=async(req,res)=>{
     }
 }
 
-module.exports = { handleCreateProduct,handleGetProducts,handleGetProduct,handleUpdateProduct,handleDeleteProduct ,handleNewArrivals,handleGetProductById}
+const handleGetProductsByCategory=async(req,res)=>{
+    try {
+        const {category}=req.params;
+        if(!category){
+            return res.status(404).json({success:false,message:"Category not found."})
+        }
+        const products=await ProductModel.find({category})
+        if(!products){
+            return res.status(404).json({success:false,message:"Products not found."})    
+        }
+        res.status(200).json({success:true,message:"Products return",products})
+    } catch (error) {
+        return res.status(500).json({success:false,message:error.message})
+    }
+}
+
+module.exports = { handleCreateProduct,handleGetProducts,handleGetProduct,handleUpdateProduct,handleDeleteProduct ,handleNewArrivals,handleGetProductById,handleGetProductsByCategory}

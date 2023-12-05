@@ -22,6 +22,8 @@ import Footer from './components/Footer'
 import AdminProducts from './pages/AdminProducts'
 import Products from './pages/Products'
 import ProductsLayout from './components/ProductsLayout'
+import Cart from './pages/Cart'
+import CategoryItems from './components/CategoryItems'
 
 
 
@@ -70,6 +72,8 @@ const App = () => {
         </Route>
 
         <Route path='/product/:slug' element={<Product />} />
+        <Route path='/products/category/:category' element={<CategoryItems />} />
+        <Route path='/cart' element={<Cart />} />
         <Route path='*' element={<Error />} />
       </Routes>
       {isFooterPage() && <Footer />}

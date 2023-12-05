@@ -175,7 +175,7 @@ const getProduct=async()=>{
       <select onChange={handleChange} value={formData.category} id="category" name="category" className='p-1.5 rounded-md outline-[--primary] shadow-sm' >
         <option value=''></option>
         {categoryInfo && categoryInfo.map((item)=>{
-          return <option className=' capitalize' key={item._id} value={item._id}>{item.slug}</option>
+          return <option className=' capitalize' key={item._id} value={item.slug}>{item.name}</option>
         })}
        
       </select>      

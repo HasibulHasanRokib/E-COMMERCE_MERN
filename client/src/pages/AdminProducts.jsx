@@ -2,33 +2,38 @@ import { useEffect, useState } from 'react'
 import {baseURL} from '../App'
 import { AiOutlineSearch } from 'react-icons/ai'
 import { Link } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
-import { DELETE_PRODUCT_FAILED, DELETE_PRODUCT_REQUEST, DELETE_PRODUCT_SUCCESS, GET_PRODUCT_FAILED, GET_PRODUCT_REQUEST, GET_PRODUCT_SUCCESS } from '../features/productSlice'
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+
 
 const AdminProducts = () => {
 
+const [products,setProducts]=useState()
+const [isLoading,setIsLoading]=useState(false)
+const [isError,setIsError]=useState(false)
 const [pageInfo,setPageInfo]=useState()
 const [search,setSearch]=useState('')
 const [page,setPage]=useState(1)
 
-const dispatch=useDispatch()
-const {productData}=useSelector((state)=>state.product)
 let productURL=`${baseURL}/api/products?search=${search}&page=${page}`
 
 const getAllProducts=async()=>{
   try {
-    dispatch(GET_PRODUCT_REQUEST())
+    setIsLoading(true)
     const res= await fetch(productURL,{
       method:"GET",
       credentials:"include"
     })
     const data=await res.json()
-    dispatch(GET_PRODUCT_SUCCESS(data.products))
-    setPageInfo(data.pagination)
+    if(data.success===false){
+      setIsError(data.message)
+      setIsLoading(false)
+    }else{
+      setProducts(data.products)
+      setPageInfo(data.pagination)
+      setIsLoading(false)
+    }
   } catch (error) {
-    dispatch(GET_PRODUCT_FAILED(error.message))
+      setIsLoading(false)
+      setIsError(error.message)
   }
 }
 
@@ -42,23 +47,17 @@ const handleSearch=(e)=>{
 
 const handleProductDelete=async(id)=>{
   try {
-    dispatch(DELETE_PRODUCT_REQUEST())
     const res= await fetch(`${baseURL}/api/product-delete/${id}`,{
       method:"DELETE",
       credentials:"include"
     })
     const data=await res.json()
     if(data.success===false){
-      dispatch(DELETE_PRODUCT_FAILED(data.message))
-      toast.error(data.message)
-    }else{
-      toast.success(data.message)
-      dispatch(DELETE_PRODUCT_SUCCESS(data.deleteProduct._id))
+      setIsError(data.message)
     }
-  } catch (error) {
-    dispatch(DELETE_PRODUCT_FAILED(error.message))
-    toast.error(error.message)
-  }
+    } catch (error) {
+     setIsError(error.message)
+    }
 }
 
 
@@ -93,7 +92,7 @@ const handleProductDelete=async(id)=>{
           </tr>
         </thead>
         <tbody>
-          {productData && productData.length > 0 && productData.map((item)=>{
+          {products && products.length > 0 && products.map((item)=>{
             return <tr className='text-center' key={item._id}>
             <td className='flex justify-center py-1 border h-14'>
               <img className='w-10' src={item.imageUrls[0]} alt="" />
@@ -104,7 +103,7 @@ const handleProductDelete=async(id)=>{
              <td className='border text-sm max-md:hidden'>{item.rating}</td>
              <td className='border text-sm max-md:hidden'>{item.stock}</td>
              <td className='border text-sm max-md:hidden'>{item.sold}</td>
-             <td className='border text-sm max-md:hidden'>Smart phone</td>
+             <td className='border text-sm max-md:hidden'>{item.category}</td>
              <td className='border text-sm max-md:hidden'>{item.discountPercentage}%</td>
              <td className='border'>
               <Link to={`/admin/update-product/${item._id}`} className='font-semibold text-sky-700 mx-4 text-sm' type="button">Edit</Link>
@@ -115,6 +114,8 @@ const handleProductDelete=async(id)=>{
         </tbody>
       </table>
      </section>
+     {isLoading ? <h5 className='my-10 text-center font-bold text-sky-600'>Loading...</h5>:null}
+     {isError ? <h5 className='my-10 text-center font-semibold text-red-600 text-sm'>{isError}</h5>:null}
      <div className="flex py-2 justify-center items-center flex-col">
             <h5 className=" text-xs font-semibold">Showing {pageInfo?.currentPage} to {pageInfo?.totalPages} of {pageInfo?.count} Entries</h5>
             <div className="my-2">
@@ -122,7 +123,6 @@ const handleProductDelete=async(id)=>{
             <button disabled={pageInfo?.nextPage===null} onClick={()=>{setPage(page + 1)}} className=" bg-white px-4 py-1.5 disabled:cursor-not-allowed disabled:opacity-80 hover:opacity-90 text-[--primary] font-bold rounded mx-1 text-sm">Next</button>
            </div>
       </div>
-      <ToastContainer />
     </main>
   )
 }

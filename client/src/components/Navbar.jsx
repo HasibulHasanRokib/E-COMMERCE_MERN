@@ -1,14 +1,22 @@
 import {FaSistrix,FaCartShopping,FaCircleUser,FaHeart,FaHouseChimney , FaBars } from "react-icons/fa6"
 import {  useSelector } from "react-redux"
-import { Link, } from "react-router-dom"
+import { Link, useSearchParams, } from "react-router-dom"
 import { AiOutlineAppstore  } from "react-icons/ai";
+import { useContext } from "react";
+import { productsContext } from "../context/productContext";
 
 const Navbar = () => {
 const {currentUser}=useSelector((state)=>state.user)
+const {products}=useSelector((state)=>state.cart)
+const {searchQuery,setSearchQuery}=useContext(productsContext)
+
+
+const handleSubmit=(e)=>{
+ e.preventDefault()
+}
 
   return (
-    <>
-    
+    <>   
         {currentUser && currentUser.isAdmin === true ? (
         <div className="flex items-center py-2.5 justify-between border px-6 shadow-md">
         <Link to={'/'}> <img className="md:w-20 w-12" src="https://skybuybd.com/_next/static/media/logo.2d8160b9.svg" alt="" /></Link>    
@@ -26,7 +34,7 @@ const {currentUser}=useSelector((state)=>state.user)
           
           <ul className="flex items-center gap-4 md:hidden">
           <li title="Cart">
-          <a href="#"><FaCartShopping className="text-xl"/></a>
+          <a href="#"><FaCartShopping className="text-xl"/> <div className="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -end-2 dark:border-gray-900">20</div></a>
           </li>
 
           <li title="WhishList">
@@ -46,16 +54,17 @@ const {currentUser}=useSelector((state)=>state.user)
             </li>
           )}  
           </ul>
+          
           </div>
 
-          <form className="border max-md:my-2 shadow-sm flex items-center justify-between rounded-md ">
-          <input type="search" placeholder="Search products" className="px-3  outline-none py-1.5 md:w-[20rem] w-full rounded-md"/>
-          <button><FaSistrix className="inline-block text-gray-700 text-xl w-10 "/></button>
+          <form className="border max-md:my-2 shadow-sm flex items-center justify-between rounded-md " onSubmit={handleSubmit}>
+          <input onChange={(e)=>{setSearchQuery(e.target.value)}} value={searchQuery} type="search" placeholder="Search products" className="px-3  outline-none py-1.5 md:w-[20rem] w-full rounded-md"/>
+          <button type="submit"><FaSistrix className="inline-block text-gray-700 text-xl w-10 "/></button>
           </form>
 
           <ul className="flex md:gap-4 items-center max-md:hidden">
-          <li title="Cart">
-          <a href="#"><FaCartShopping className="text-2xl mx-3"/></a>
+          <li title="Cart" className=" relative">
+          <Link to={'/cart'}><FaCartShopping className="text-2xl mx-3"/>{currentUser===null?"" : products.length === 0 ?"":<div className="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -end-2 dark:border-gray-900">{products.length}</div> }</Link>
           </li>
 
           <li title="WhishList">

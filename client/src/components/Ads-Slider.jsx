@@ -1,37 +1,40 @@
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import {useSelector} from 'react-redux'
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { baseURL } from "../App";
+
 
 const AdsSlider = () => {
 
-const {banner}=useSelector((state)=>state.banner)
-    
-      const settings = {
-        dots: true,
-        infinite: true,
-        speed: 500,
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        autoplay: true,
-        autoplaySpeed: 4000,
-      };
+const [banners,setBanners]=useState()
 
-  return (
-    <>
-    <div className="md:w-4/6 w-full md:px-5 md:mt-2">
-      <Slider {...settings}>
-        {banner && banner.map((image, index) => (
-          <div key={index}>
-            <img className="w-full object-contain  h-auto border-b-2 shadow-sm" src={image.bannerImages} alt={`Image ${index + 1}`} />
-          </div>
-        ))}
-      </Slider>
-    </div>
+const getAllBanner=async()=>{
+  try {
+    const res=await fetch(`${baseURL}/api/banner`,{
+      method:"GET",
+      credentials:"include"
+    })
+    const data=await res.json()
+    setBanners(data.banners)
+  } catch (error) {
+    console.log(error.message)
+  }
+  }
 
-    </>
-  )
-}
+   useEffect(()=>{
+   getAllBanner();
+   },[])
+
+
+ 
+
+ return (
+     <div className="image-slider">
+
+     </div>
+   );
+ };
+ 
 
 export default AdsSlider

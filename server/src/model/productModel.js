@@ -22,7 +22,7 @@ const productSchema= new Schema({
         trim:true,
         required:[true,'Product price is required.'],
         validate:(v)=> v > 0,
-        message:(props)=>{`${props.value} is not a valid price must be grater than 0`}
+        message:(props)=>{`${props.value} is not a valid discount percentage, must be greater than or equal to 0`}
     },
     discountPercentage:{
         type:Number,
@@ -41,7 +41,7 @@ const productSchema= new Schema({
         trim:true,
         required:[true,'Product quantity is required.'],
         validate:(v)=> v > 0,
-        message:(props)=>{`${props.value} is not a valid quantity must be grater than 0`}
+        message:(props)=>{`${props.value}  is not a valid  stock, must be greater than or equal to 0`}
     },
     sold:{
         type:Number,
@@ -53,8 +53,8 @@ const productSchema= new Schema({
     },
 
     category:{
-        type:Schema.Types.ObjectId,
-        ref:'Category',
+        type:String,
+        ref:'category',
         required:[true,'Product category is required.']
     }
 

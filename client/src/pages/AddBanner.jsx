@@ -1,24 +1,22 @@
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "firebase/storage";
 import { useEffect, useState } from "react";
 import { app } from "../components/FireBase";
-import { ADD_BANNER_FAILED, ADD_BANNER_REQUEST, ADD_BANNER_SUCCESS, DELETE_BANNER_FAILED, DELETE_BANNER_REQUEST, DELETE_BANNER_SUCCESS, GET_BANNER_FAILED, GET_BANNER_REQUEST, GET_BANNER_SUCCESS } from "../features/bannerSlice";
-import { useDispatch, useSelector } from "react-redux";
 import { baseURL } from "../App";
 import { useNavigate } from "react-router-dom";
 
 const AddBanner = () => {
 
+    const [banners,setBanners]=useState()
+
     const [file, setFile] = useState()
     const [formData,setFormData]=useState({bannerImages:""})
-
     const [filePer,setFilePer]=useState(0)
     const [fileErr,setFileErr]=useState(false)
 
-
-    const {isLoading,error,banner}=useSelector((state)=>state.banner)
+    const[isLoading,setIsLoading]=useState(false)
+    const[isError,setIsError]=useState(false)
 
     const navigate=useNavigate()
-    const dispatch=useDispatch()
 
     const handleImageUpload=(file)=>{
         const storage=getStorage(app)
@@ -39,10 +37,11 @@ const AddBanner = () => {
         )
      }
 
+
      const handleBannerSubmit=async(e)=>{
             e.preventDefault()
             try {
-            dispatch(ADD_BANNER_REQUEST())
+              setIsLoading(true)
               const res=await fetch(`${baseURL}/api/banner`,{
                 method:"POST",
                 headers:{"Content-Type":"application/json"},
@@ -51,31 +50,36 @@ const AddBanner = () => {
               })
               const data= await res.json()
               if(data.success===false){
-              dispatch(ADD_BANNER_FAILED(data.message))
+                setIsLoading(false)
+                setIsError(data.message)
               }else{
-              dispatch(ADD_BANNER_SUCCESS(data.newBanner))
-              navigate('/')
+                setIsLoading(false)
+                navigate('/')
               }
             } catch (error) {
-              dispatch(ADD_BANNER_FAILED(error.message))
+              setIsLoading(false)
+              setIsError(error.message)
             }
       }
       
       const getAllBanner=async()=>{
         try {
-          dispatch(GET_BANNER_REQUEST())
+          setIsLoading(true)
           const res=await fetch(`${baseURL}/api/banner`,{
             method:"GET",
             credentials:"include"
           })
           const data=await res.json()
           if(data.success===true){
-            dispatch(GET_BANNER_SUCCESS(data.banners))
+          setIsLoading(false)
+          setBanners(data.banners)
           }else{
-            dispatch(GET_BANNER_FAILED(data.message))
+          setIsLoading(false)
+          setIsError(data.message)
           }
         } catch (error) {
-          dispatch(GET_BANNER_FAILED(error.message))
+          setIsError(error.message)
+          setIsLoading(false)
         }
       }
 
@@ -85,19 +89,13 @@ const AddBanner = () => {
 
       const handleBannerDelete=async(id)=>{
         try {
-         dispatch(DELETE_BANNER_REQUEST())
          const res= await fetch(`${baseURL}/api/banner/${id}`,{
           method:"DELETE",
           credentials:"include"
          })
-         const data = await res.json()
-         if(data.success===true){
-          dispatch(DELETE_BANNER_SUCCESS(data.deleteBanner._id))
-         } else{
-          dispatch(DELETE_BANNER_FAILED(data.message))
-         }
+         const data = await res.json()        
         } catch (error) {
-          dispatch(DELETE_BANNER_FAILED(error.message))
+          setIsError(error.message)
         }
       }
 
@@ -122,7 +120,7 @@ const AddBanner = () => {
            formData && formData.bannerImages.length > 0 && (
               <div className="border rounded-md px-2 py-3 flex justify-between items-center my-1 shadow-sm bg-white">
               <img className="w-20 h-10 object-contain" src={formData.bannerImages} alt="product image" />
-              <button type="button" onClick={()=>setFormData({ bannerImages: ""})} className="uppercase text-red-600 text-sm px-2 font-semibold">Delete</button>
+              <button type="button" className="uppercase text-red-600 text-sm px-2 font-semibold">Delete</button>
               </div>
             )
         }
@@ -131,18 +129,19 @@ const AddBanner = () => {
         <button type='submit' className=' p-1.5 bg-[--primary] rounded-md shadow-md text-white font-semibold hover:opacity-90 disabled:opacity-50'>{isLoading ? "Loading...":"Save"}</button>
       </div> 
       <h5 className="text-red-700 text-xs text-center">{fileErr && fileErr}</h5>
-      {error && <h5 className='text-center font-semibold text-red-500 mt-3 text-sm'>{error}</h5>}
+      {isError && <h5 className='text-center font-semibold text-red-500 mt-3 text-sm'>{isError}</h5>}
     </form>
 
     <div className="">
     <h5 className='font-semibold my-2'>Banner images</h5>
       <p className='my-1 text-xs text-[--primary]'>* Here all banner images also delete images </p>
-      {banner && banner.map((img)=>{
-        return <div className=" flex border rounded-md shadow-sm my-4 justify-between md:w-[30rem]">
+      {banners && banners.map((img)=>{
+        return <div className=" flex border rounded-md shadow-sm my-4 justify-between md:w-[30rem]" key={img._id}>
           <img className=" w-44 h-20" src={img.bannerImages} alt="Banner images" />
           <button type="button" onClick={()=>handleBannerDelete(img._id)} className="font-semibold text-red-500 text-sm px-3">DELETE</button>
         </div>
       })}
+     {isLoading ? <h5 className='my-10 text-center font-bold text-sky-600'>Loading...</h5>:null}
     </div>
     </section>
     </div>

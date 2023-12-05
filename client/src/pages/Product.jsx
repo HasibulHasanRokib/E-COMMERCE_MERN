@@ -1,28 +1,38 @@
 import { useEffect, useState } from "react";
-import { AiFillStar, AiFillHeart } from "react-icons/ai";
-import { BsFillCartCheckFill } from "react-icons/bs";
-import {useParams} from 'react-router-dom'
+import { AiFillStar,} from "react-icons/ai";
+import {useNavigate, useParams} from 'react-router-dom'
 import {baseURL} from '../App'
 
-const Product = () => {
+import { useDispatch, useSelector } from "react-redux";
+import { ADD_TO_CART } from "../features/cartSlice";
 
-const[product,setProduct]=useState()
+const Product = () => {
+const [product,setProduct]=useState()
+const [isLoading,setIsLoading]=useState(false)
+const [isError,setIsError]=useState(false)
 const [imageIndex,setImageIndex]=useState(0)
 const [count,setCount]=useState(1)
-
+const {currentUser}=useSelector((state)=>state.user)
 const {slug} = useParams()
 
 const getProduct=async()=>{
   try {
+    setIsLoading(true)
     const res = await fetch(`${baseURL}/api/product/${slug}`,{
     method:"GET",
-    // credentials:"include"
     })
     const data = await res.json()
-    setProduct(data.product)
-    console.log(data.product)
+    console.log(data)
+    if(data.success===false){
+      setIsLoading(false)
+      setIsError(data.message)
+    }else{
+      setIsLoading(false)
+      setProduct(data.product)
+    }
   } catch (error) {
-    console.log(error.message)
+    setIsLoading(false)
+    setIsError(error.message)
   }
 }
 
@@ -30,12 +40,24 @@ const getProduct=async()=>{
   getProduct()
  },[])
 
+ const navigate=useNavigate()
+
+ const cart=useSelector((state)=>state.cart)
+ console.log(cart)
+ const dispatch=useDispatch()
+
+ const handleCart=()=>{
+  if(currentUser===null){
+    navigate('/login')
+  }else{
+    dispatch(ADD_TO_CART(product,count,{price:product.regularPrice}))
+  }
+ }
 
   return (
     <>
     <main className="p-4 flex max-md:flex-col-reverse">
       <section className="md:w-2/4 max-md:my-3 flex justify-center items-center flex-col">  
-      
       <div className="">
       <img className="w-[25rem] h-[20rem] object-contain" src={product?.imageUrls[imageIndex]} alt="" />
       </div>
@@ -48,6 +70,9 @@ const getProduct=async()=>{
       
       </section>
       <section className="md:w-2/4 px-4">
+       {isLoading ? <h4 className='font-semibold text-sky-600'>Loading...</h4>:null}
+       {isError ? <h5 className='my-10 font-semibold text-red-600 text-sm'>{isError}</h5>:null}
+
        <h1 className="font-bold text-3xl capitalize">{product?.title}</h1>
        <h5 className=" font-bold text-gray-400 capitalize">{product?.brand}</h5>
 
@@ -66,8 +91,8 @@ const getProduct=async()=>{
         </div>
 
        <div className=" flex my-2 gap-3">
-        <button type="button" className="bg-[--primary] text-white font-bold px-3 py-2 shadow-sm rounded-md hover:opacity-90 text-sm">Buy Now</button>
-        <button type="button" className="font-bold border-2 border-[--primary] rounded-md px-3 py-2 text-[--primary] text-sm">Add to Cart</button>
+        <button type="button" onClick={handleCart} className="font-semibold bg-[--primary] text-white border-2 border-[--primary] shadow-sm rounded-md px-3 py-1.5 hover:text-[--primary] hover:bg-white text-sm ">Add to Cart</button>
+        <button type="button"  className="font-semibold  border-2 border-[--primary] shadow-sm rounded-md px-3 py-1.5 text-[--primary] bg-white text-sm ">Add Wishlist</button>
        </div>
        <samp className=" font-sans">
         <h2 className="font-bold text-2xl my-2">Description</h2>

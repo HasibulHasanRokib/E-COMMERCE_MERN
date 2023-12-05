@@ -1,18 +1,16 @@
 import {baseURL} from '../App'
 import { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { ADD_CATEGORY_FAILED,ADD_CATEGORY_REQUEST, ADD_CATEGORY_SUCCESS, DELETE_CATEGORY_FAILED, DELETE_CATEGORY_REQUEST, DELETE_CATEGORY_SUCCESS, GET_CATEGORY_FAILED, GET_CATEGORY_REQUEST, GET_CATEGORY_SUCCESS } from '../features/categorySlice'
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage'
 import { app } from '../components/FireBase'
 
 const CreateCategory = () => {
    
   const [file,setFile]=useState()
-  const [fileParse,setFileParse]=useState(0)
-  const{isLoading,errorMessage,categoryData}=useSelector((state)=>state.category)
-  const dispatch=useDispatch()
-
+  const [fileParse,setFileParse]=useState(0) 
+  const [isLoading,setIsLoading]=useState(false)
+  const [isError,setIsError]=useState(false) 
   const [formData,setFormData]=useState({name:"",categoryImage:""})
+  const [categories,setCategories]=useState()
   
 
   const handleFileUpload=(file)=>{
@@ -34,14 +32,14 @@ const CreateCategory = () => {
     )
    }
 
-    const handleChange=(e)=>{
-      setFormData({...formData,[e.target.name]:e.target.value})
-      }
+  const handleChange=(e)=>{
+  setFormData({...formData,[e.target.name]:e.target.value})
+  }
 
    const handleSubmit=async(e)=>{
     e.preventDefault()
      try {
-      dispatch(ADD_CATEGORY_REQUEST())
+      setIsLoading(true)
       const res= await fetch(`${baseURL}/api/categories`,{
         method:"POST",
         headers:{"Content-Type":"application/json"},
@@ -50,27 +48,36 @@ const CreateCategory = () => {
       })
       const data=await res.json()
       if(data.success===false){
-        dispatch(ADD_CATEGORY_FAILED(data.message))
+      setIsLoading(false)
+      setIsError(data.message)
       }else{
-        dispatch(ADD_CATEGORY_SUCCESS(data.newCategory))
         setFormData({name:"",categoryImage:""})
+        setIsLoading(false)
       }
      } catch (error) {
-      dispatch(ADD_CATEGORY_FAILED(error.message))
+      setIsLoading(false)
+      setIsError(error.message)
      }    
-     }
+  }
   
   const getCategory=async()=>{
     try {
-      dispatch(GET_CATEGORY_REQUEST())
+      setIsLoading(true)
       const res=await fetch(`${baseURL}/api/categories`,{
       method:"GET",
       credentials:"include"
      }) 
      const data= await res.json()
-      dispatch(GET_CATEGORY_SUCCESS(data.categories))
+     if(data.success===false){
+      setIsError(data.message)
+      setIsLoading(false)
+     }else{
+      setIsLoading(false)
+      setCategories(data.categories)
+     }
     } catch (error) {
-      dispatch(GET_CATEGORY_FAILED(error.message))
+     setIsError(error.message)
+     setIsLoading(false)
     }
   }   
 
@@ -80,21 +87,20 @@ const CreateCategory = () => {
 
   const handleDeleteCategory=async(id)=>{
     try {
-      dispatch(DELETE_CATEGORY_REQUEST())
       const res= await fetch(`${baseURL}/api/categories/${id}`,{
         method:"DELETE",
         credentials:"include"
       })
       const data=await res.json()
-      dispatch(DELETE_CATEGORY_SUCCESS(data.deleteCategory._id))
+      if(data.success===false){
+        setIsError(data.message)
+      }
     } catch (error) {
-      console.log(error.message)
-      dispatch(DELETE_CATEGORY_FAILED(error.message))
+       setIsError(error.message)
     }
   }
 
-
-  
+ 
   return (
     <>
     <section className="p-3 border-2 md:min-h-[80vh] my-3 rounded-md lg:w-[85vw] w-full">
@@ -113,7 +119,7 @@ const CreateCategory = () => {
           </tr>
         </thead>
         <tbody>
-          {categoryData && categoryData.map((item,index)=>{
+          {categories && categories.map((item,index)=>{
             return <tr key={index}>
               <td className='px-3 border'><img className='w-8' src={item?.categoryImage} alt="" /></td>
               <td className='p-3 border capitalize'>{item?.name}</td>
@@ -125,9 +131,11 @@ const CreateCategory = () => {
           })}
         </tbody>
       </table>
+     {isLoading ? <h5 className='my-10 text-center font-bold text-sky-600'>Loading...</h5>:null}
     </div> 
     <form className='flex  flex-col px-3 py-2 md:w-[50%]' onSubmit={handleSubmit}>
-      <label className='font-semibold py-2 text-[--primary]' htmlFor="category">Add Category</label>
+      <label className='font-bold py-2 text-[--primary]' htmlFor="category">Add Category</label>
+      <p className='my-1 text-xs text-[--primary]'>*First upload the image then save the category . (max 1)</p>
       <span>
       <input onChange={handleChange} value={formData.name} className='py-1.5 px-2 rounded-md shadow-sm outline-none w-3/5 placeholder:text-sm' type="search" name="name" id="name" placeholder='Enter category name' />
       <div className=" border p-2 shadow-sm rounded flex justify-between items-center my-3">
@@ -136,12 +144,10 @@ const CreateCategory = () => {
       </div>
       <button disabled={isLoading} className='font-semibold bg-[--primary] py-1.5 px-4 text-white rounded-md shadow-sm max-md:text-xs max-md:py-2.5' type='submit'>{ isLoading ? "Loading...":"Save"}</button>
       </span>
-      {errorMessage && (<span className='mt-2 text-xs text-red-500'>{errorMessage}</span>)}
+      {isError && (<span className='mt-2 text-xs text-red-500'>{isError}</span>)}
     </form>
     </div>
-    </section> 
-
-  
+    </section>  
     </>
   )
 }
