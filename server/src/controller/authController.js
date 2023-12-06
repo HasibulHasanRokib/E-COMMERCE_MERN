@@ -59,7 +59,7 @@ const handleSignIn = async (req, res) => {
             return res.status(401).json({ success: false, message: "You are block from this site." })
         }
 
-        const token = jwt.sign({ id: userExist._id }, process.env.JWT_KEY, { expiresIn: '1h' })
+        const token = jwt.sign({ id: userExist._id }, process.env.JWT_KEY)
 
         const { password: pass, ...user } = userExist._doc;
 
@@ -75,7 +75,7 @@ const handleGoogleAuth = async (req, res) => {
         const userExist = await UserModel.findOne({ email: req.body.email })
 
         if (userExist) {
-            const token = jwt.sign({ id: userExist._id }, process.env.JWT_KEY, { expiresIn: '1h' })
+            const token = jwt.sign({ id: userExist._id }, process.env.JWT_KEY )
             const { password: pass, ...user } = userExist._doc;
             return res.cookie('accessToken', token).json({ success: true, message: 'Login successful', user })
         } else {
@@ -88,7 +88,7 @@ const handleGoogleAuth = async (req, res) => {
                 avatar: req.body.avatar
             })
             await newUser.save()
-            const token = jwt.sign({ id: newUser._id }, process.env.JWT_KEY, { expiresIn: '1h' })
+            const token = jwt.sign({ id: newUser._id }, process.env.JWT_KEY )
             const { password: pass, ...user } = newUser._doc;
             return res.cookie('accessToken', token).json({ success: true, message: 'Login successful', user })
         }

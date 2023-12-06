@@ -51,6 +51,18 @@ const productSchema= new Schema({
         type:Array,
         required:true
     },
+    colors:{
+      type:Array,
+    },
+    clothSize:{
+      type:Array,
+    },
+    shoesSize:{
+      type:Array,
+    },
+    phoneStorage:{
+      type:Array,
+    },
 
     category:{
         type:String,

@@ -22,7 +22,6 @@ const getProduct=async()=>{
     method:"GET",
     })
     const data = await res.json()
-    console.log(data)
     if(data.success===false){
       setIsLoading(false)
       setIsError(data.message)
@@ -43,7 +42,7 @@ const getProduct=async()=>{
  const navigate=useNavigate()
 
  const cart=useSelector((state)=>state.cart)
- console.log(cart)
+//  console.log(cart)
  const dispatch=useDispatch()
 
  const handleCart=()=>{
@@ -83,6 +82,41 @@ const getProduct=async()=>{
           <p className="bg-white py-1 px-2 shadow-sm">Status :<span className="font-bold mx-2 text-sm">{product?.stock > 0 ? "In Stock" :"Out of stock"}</span></p>
           <p className="bg-white py-1 px-2 shadow-sm">Sold :<span className="font-bold mx-2 text-sm">{product?.sold}</span></p>
         </div>
+
+        <div className="flex flex-wrap gap-3 my-3">
+        <p className="font-bold">Colors:</p>
+        {product && product.colors.map((color)=>{
+         return <p className="bg-white capitalize font-semibold px-3 text-sm py-1 rounded-sm shadow-sm" key={color}>{color}</p>      
+        })}
+        </div>
+
+        {product && product.category==='smart-phone'?(<>
+        <div className="flex flex-wrap gap-3">
+        <p className="font-bold">Storage:</p>
+        { product.phoneStorage.map((item)=>{
+         return <p className="bg-white font-semibold px-3 text-sm py-1 rounded-sm shadow-sm" key={item}>{item} GB</p>      
+        })}
+        </div>
+        </>):null}
+
+        {product && product.category==='shoes'?(<>
+        <div className="flex flex-wrap gap-3">
+        <p className="font-bold">Size:</p>
+        { product.shoesSize.map((item)=>{
+         return <p className="bg-white font-semibold px-3 text-sm py-1 rounded-sm shadow-sm" key={item}>{item}</p>      
+        })}
+        </div>
+        </>):null}
+
+        {product && product.category==='mens-clothing'?(<>
+        <div className="flex flex-wrap gap-3">
+        <p className="font-bold">Size:</p>
+        { product.clothSize.map((item)=>{
+         return <p className="bg-white font-semibold px-3 text-sm py-1 rounded-sm shadow-sm capitalize" key={item}>{item}</p>      
+        })}
+        </div>
+        </>):null}
+
 
         <div className="my-3">
          <button disabled={count>=product?.stock?true:false}  onClick={()=>setCount(count+1)} className="p-1 border-2  w-10 hover:bg-[--primary] hover:text-white font-bold mr-2 shadow-sm">+</button>

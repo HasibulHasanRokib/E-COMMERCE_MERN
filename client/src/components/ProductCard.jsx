@@ -13,7 +13,7 @@ const ProductCard = ({product}) => {
 <figure className="md:w-[145px] w-[130px] h-[145px] relative group">
 <img alt="" className="" src={product.imageUrls[0]} />
 </figure>
-<p className=" text-sm mt-5 px-3">{product?.title.slice(0,18)}</p>
+<p className=" text-sm mt-5 px-3 capitalize">{product?.title.slice(0,18)}</p>
 <p className=" text-tiny my-2  duration-300">Tk.{product?.regularPrice}</p> {/*<del className="ml-2 text-xs">৳120000</del>*/}
 </Link>
 </article>

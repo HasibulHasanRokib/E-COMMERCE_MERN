@@ -5,7 +5,7 @@ const slugify = require('slugify')
 const handleCreateProduct =async (req, res) => {
     try {
 
-       const { title,description , regularPrice ,imageUrls, category,discountPercentage,rating ,brand,stock, sold} = req.body;
+       const { title,description , regularPrice ,imageUrls, category,discountPercentage,rating ,brand,stock,sold,colors,shoesSize,phoneStorage,clothSize} = req.body;
 
        if(!title || !description || !regularPrice || !stock || !category || !imageUrls ) {
         return res.status(401).json({success:false,message:'Fill the required field.'})
@@ -17,7 +17,7 @@ const handleCreateProduct =async (req, res) => {
         return res.status(409).json({success:false,message:'This product already created.'})
        }
        
-       const newProduct= await ProductModel({ title,slug:slugify(title),description , regularPrice , discountPercentage,rating ,brand,stock, sold, imageUrls, category })
+       const newProduct= await ProductModel({ title,slug:slugify(title),description , regularPrice , discountPercentage,rating ,brand,stock, sold, imageUrls, category,colors,shoesSize,phoneStorage,clothSize })
 
        await newProduct.save();
 
@@ -123,6 +123,11 @@ const handleUpdateProduct=async(req,res)=>{
                 brand:req.body.brand,
                 rating:req.body.rating,
                 sold:req.body.sold,
+                colors:req.body.colors,
+                phoneStorage:req.body.phoneStorage,
+                shoesSize:req.body.shoesSize,
+                clothSize:req.body.clothSize,
+                
                 
             }
         },{new:true})

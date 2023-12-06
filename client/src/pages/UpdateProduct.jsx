@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage'
 import { app } from '../components/FireBase'
+import { clothSize,colors,phoneStorage } from '../components/Objects'
 
 const UpdateProduct = () => {
 
@@ -17,8 +18,9 @@ const {id} = useParams()
 
 const navigate = useNavigate()
 
-const [formData, setFormData] = useState({ title:"",description:"" , regularPrice:0 ,imageUrls:[], category:"",discountPercentage:0,rating:0 ,brand:"",stock:0, sold:0})
+const [formData, setFormData] = useState({ title:"",description:"" , regularPrice:0 ,imageUrls:[],colors:[],phoneStorage:[],shoesSize:[],clothSize:[] ,category:"",discountPercentage:0,rating:0 ,brand:"",stock:0, sold:0})
 
+console.log(formData)
 
 const getCategory=async()=>{
   try {
@@ -41,7 +43,6 @@ const getProduct=async()=>{
       })
       const data = await res.json()
       setFormData(data.productInfo)
-      console.log(data.product)
     } catch (error) {
       console.log(error.message)
     }
@@ -99,7 +100,29 @@ const getProduct=async()=>{
   }
   
   const handleChange=(e)=>{
-    setFormData({...formData,[e.target.id]:e.target.value})
+   const{id,value,checked,type}=e.target;
+   if(type==='checkbox'){
+    let updatedArray;
+    if(id==='colors'){
+      updatedArray=checked ? [...formData.colors,value]:formData.colors.filter((color)=>color!==value) 
+    }
+    else if(id==='phoneStorage'){
+      updatedArray=checked ? [...formData.phoneStorage,value]:formData.phoneStorage.filter((storage)=>storage!==value)
+    }
+    else if(id==='clothSize'){
+      updatedArray=checked ?[...formData.clothSize,value]:formData.category.filter((size)=>size!==value)
+    }
+    else if(id==='shoesSize'){
+      updatedArray=checked ? [...formData.shoesSize,value]:formData.shoesSize.filter((size)=>size!==value)
+    }
+    else{
+      setFormData({...formData,[id]:value})
+      return;
+    }
+    setFormData({...formData,[id]:updatedArray})
+   }else{
+    setFormData({...formData,[id]:value})
+   }
   }
 
   const handleProductUpdate=async(e)=>{
@@ -131,7 +154,7 @@ const getProduct=async()=>{
 
   const handleDeleteImage = (index) => {
     setFormData({ ...formData, imageUrls: formData.imageUrls.filter((url, i) => i !== index) })
-}
+  }
 
 
 
@@ -191,6 +214,65 @@ const getProduct=async()=>{
       <label className='font-semibold my-1' htmlFor="brand">Brand:</label>
       <input onChange={handleChange} value={formData.brand} className='p-1.5 rounded-md outline-[--primary] shadow-sm' type="text" name="brand" id="brand" />       
       </span>
+
+      
+      <span className='flex flex-col'>
+            <label className='font-semibold mt-2' htmlFor="colors">Colors:</label>
+            <div className="flex flex-wrap gap-2 my-1">
+            {colors.map((item)=>{
+              return <span className='flex gap-1' key={item.id}>
+                <input className='w-4' type="checkbox" onChange={handleChange} checked={formData.colors.includes(item.color)} value={item.color} name={item.color} id='colors' />
+                <p className='capitalize text-sm'>{item.color}</p>
+              </span>
+            })}
+           </div>
+           </span>
+
+           {formData.category==='smart-phone'? (
+            <>
+            <span className='flex flex-col'>
+            <label className='font-semibold mt-2' htmlFor="phoneStorage">Phone Storage:</label>
+            <div className="flex flex-wrap gap-2 my-1">
+            {phoneStorage.map((item)=>{
+              return <span className='flex gap-1' key={item.id}>
+                <input className='w-4' onChange={handleChange} checked={formData.phoneStorage.includes(item.storage)} value={item.storage} type="checkbox" name={item.storage} id='phoneStorage' />
+                <p className='capitalize text-sm'>{item.storage}GB</p>
+              </span>
+            })}
+           </div>
+           </span>  
+            </>
+           ):null}
+           {formData.category==='mens-clothing'? (
+            <>
+            <span className='flex flex-col'>
+            <label className='font-semibold mt-2' htmlFor="clothSize">Cloth Size:</label>
+            <div className="flex flex-wrap gap-2 my-1">
+            {clothSize.map((item)=>{
+              return <span className='flex gap-1' key={item.id}>
+                <input className='w-4' onChange={handleChange} checked={formData.clothSize.includes(item.size)} value={item.size} type="checkbox" name={item.size} id='clothSize' />
+                <p className='capitalize text-sm'>{item.size}</p>
+              </span>
+            })}
+           </div>
+           </span>  
+            </>
+           ):null}
+           {formData.category==='shoes'? (
+            <>
+            <span className='flex flex-col'>
+            <label className='font-semibold mt-2' htmlFor="shoesSize">Shoes Size:</label>
+            <div className="flex flex-wrap gap-2 my-1">
+            {shoesSize.map((item)=>{
+              return <span className='flex gap-1' key={item.id}>
+                <input className='w-4' onChange={handleChange} checked={formData.shoesSize.includes(item.size)} value={item.size} type="checkbox" name={item.size} id='shoesSize' />
+                <p className='capitalize text-sm'>{item.size}</p>
+              </span>
+            })}
+           </div>
+           </span>  
+            </>
+           ):null}
 
       </div>
 
