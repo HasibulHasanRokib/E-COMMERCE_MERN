@@ -1,13 +1,13 @@
 import MenuCategory from "./Menu_Category"
-import MenuColors from "./Menu_Colors"
 import MenuPrice from "./Menu_Price"
 
 const Menu = () => {
 
+
+
   return (
-    <section className="p-3 mt-1 w-[200px] border-r-2 shadow-sm bg-white">
-     <MenuCategory/>
-     <MenuColors/>
+    <section className="p-3 min-h-screen mt-1 w-[250px] border-r-2 shadow-sm bg-white max-md:hidden">
+     <MenuCategory />
      <MenuPrice/>
     </section>
   )

@@ -34,12 +34,12 @@ export const colors=[
     {id:8,color:"white", code:"#ffffff"},
     {id:9,color:"black", code:"#000"},
 ]
-export const priceOptions=[
-    { label: 'Any Price', value: 'any' },
-    { label: '0 - 50 Tk', value: '0-50' },
-    { label: '100 - 300 Tk', value: '100-300' },
-    { label: '301 - 500 Tk', value: '301-500' },
-    { label: '501 - 800 Tk', value: '501-800' },
-    { label: '801 - 1000 Tk', value: '801-1000' },
-    { label: 'Over-1000 Tk', value: '1001-2000' },
+export const price=[
+    { label: 'Any Price', value: 'all' },
+    { label: '0 - 1000 Tk', value: '0-1000' },
+    { label: '1000 - 3000 Tk', value: '1001-3000' },
+    { label: '3000 - 5000 Tk', value: '3001-5000' },
+    { label: '5000 - 8000 Tk', value: '5001-8000' },
+    { label: '8000 - 10000 Tk', value: '8001-10000' },
+    { label: 'Over-10000 Tk', value: '10001-200000' },
   ]

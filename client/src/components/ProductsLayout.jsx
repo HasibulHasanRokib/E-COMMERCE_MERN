@@ -5,7 +5,7 @@ import Menu from "./Menu"
 
 const ProductsLayout = () => {
   return (
-    <main className="flex gap-4">
+    <main className="flex">
       <Menu />
       <Outlet />
     </main>
