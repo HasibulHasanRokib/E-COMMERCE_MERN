@@ -10,20 +10,20 @@ import UpdateProfile from './pages/UpdateProfile'
 import UpdatePassword from './pages/UpdatePassword'
 import RestPassword from './pages/RestPassword'
 import ForgotPassword from './pages/ForgotPassword'
-import PrivateAdmin from './components/PrivateAdmin'
-import AdminLayout from './components/AdminLayout'
-import Users from './pages/Users'
-import CreateCategory from './pages/CreateCategory'
-import CreateProduct from './pages/CreateProduct'
+import PrivateAdmin from './admin/PrivateAdmin'
+import AdminLayout from './admin/AdminLayout'
+import Users from './admin/Users'
+import CreateCategory from './admin/CreateCategory'
+import CreateProduct from './admin/CreateProduct'
 import Product from './pages/Product'
-import UpdateProduct from './pages/UpdateProduct'
-import AddBanner from './pages/AddBanner'
+import UpdateProduct from './admin/UpdateProduct'
+import AddBanner from './admin/AddBanner'
 import Footer from './components/Footer'
-import AdminProducts from './pages/AdminProducts'
+import AdminProducts from './admin/AdminProducts'
 import Products from './pages/Products'
 import ProductsLayout from './components/ProductsLayout'
 import Cart from './pages/Cart'
-import CategoryItems from './components/CategoryItems'
+import { ToastContainer } from 'react-toastify'
 
 
 
@@ -72,11 +72,22 @@ const App = () => {
         </Route>
 
         <Route path='/product/:slug' element={<Product />} />
-        <Route path='/products/category/:category' element={<CategoryItems />} />
         <Route path='/cart' element={<Cart />} />
         <Route path='*' element={<Error />} />
       </Routes>
       {isFooterPage() && <Footer />}
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
     </>
   )
 }

@@ -46,7 +46,7 @@ const Users = () => {
 
 
     return (
-      <main className='p-3 border-2 md:min-h-[80vh] my-3 rounded-md lg:w-[85vw] max:w-10/12'>
+      <main className='p-3'>
         <article className="border-b border-gray-900/10 pb-5">
           <h2 className="text-2xl font-semibold leading-7 text-[--primary]">Users Information</h2>
           <p className="mt-1 text-sm leading-6 text-gray-600">All users.</p>

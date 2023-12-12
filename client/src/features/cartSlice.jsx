@@ -10,11 +10,10 @@ const cartSlice=createSlice({
     },
 
     reducers:{
-  
     }
 
 })
 
-export const {ADD_TO_CART}=cartSlice.actions
+export const {}=cartSlice.actions
 
 export default cartSlice.reducer;

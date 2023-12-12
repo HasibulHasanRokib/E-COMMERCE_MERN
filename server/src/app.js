@@ -6,6 +6,7 @@ const authRouter=require('./router/authRouter')
 const categoryRouter = require('./router/categoryRouter')
 const productRouter=require('./router/productRouter')
 const bannerRouter = require('./router/bannerRouter')
+const cartRouter = require('./router/cartRouter')
 
 
 
@@ -26,6 +27,7 @@ app.use('/auth',authRouter)
 app.use('/api/categories',categoryRouter)
 app.use('/api',productRouter)
 app.use('/api/banner',bannerRouter)
+app.use('/api/cart',cartRouter)
 
 //router error
 app.use((req,res,next)=>{

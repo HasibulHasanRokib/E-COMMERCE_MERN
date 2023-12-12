@@ -7,7 +7,6 @@ export const productsContext=React.createContext()
 const ProductsProvider=({children})=>{
 
     const [products,setProducts]=useState([])
-    //  const [query,setQuery]=useSearchParams()
 
 
     useEffect(()=>{

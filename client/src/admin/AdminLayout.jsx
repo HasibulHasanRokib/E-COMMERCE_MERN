@@ -1,12 +1,13 @@
 import { Outlet } from "react-router-dom"
-import Sidebar from "./Sidebar"
-
+import Sidebar from "../admin/Sidebar"
 
 const AdminLayout = () => {
   return (
-    <main className="flex gap-1 md:gap-4">
+    <main className=" grid grid-cols-6">   
       <Sidebar />
+      <div className="col-span-5">
       <Outlet />
+      </div>
     </main>
   )
 }

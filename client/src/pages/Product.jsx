@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
 import { AiFillStar,} from "react-icons/ai";
-import {useNavigate, useParams} from 'react-router-dom'
+import {useParams} from 'react-router-dom'
 import {baseURL} from '../App'
 
-import { useDispatch, useSelector } from "react-redux";
-import { ADD_TO_CART } from "../features/cartSlice";
 
 const Product = () => {
 const [product,setProduct]=useState()
@@ -12,8 +10,8 @@ const [isLoading,setIsLoading]=useState(false)
 const [isError,setIsError]=useState(false)
 const [imageIndex,setImageIndex]=useState(0)
 const [count,setCount]=useState(1)
-const {currentUser}=useSelector((state)=>state.user)
 const {slug} = useParams()
+
 
 const getProduct=async()=>{
   try {
@@ -39,19 +37,27 @@ const getProduct=async()=>{
   getProduct()
  },[])
 
- const navigate=useNavigate()
 
- const cart=useSelector((state)=>state.cart)
-//  console.log(cart)
- const dispatch=useDispatch()
-
- const handleCart=()=>{
-  if(currentUser===null){
-    navigate('/login')
-  }else{
-    dispatch(ADD_TO_CART(product,count,{price:product.regularPrice}))
+ const clickAddToCart=async()=>{
+  if(product){
+    const {_id:productId,regularPrice}=product;
+    try {
+      const res= await fetch(`${baseURL}/api/cart/add-cart`,{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({productId,quantity:count}),
+        credentials:"include"
+      })
+      const data= await res.json()
+      if(data.success===true){
+        console.log(data.message)
+      }
+    } catch (error) {
+      console.log(error.message)
+    }
   }
  }
+ 
 
   return (
     <>
@@ -86,7 +92,7 @@ const getProduct=async()=>{
         <div className="flex flex-wrap gap-3 my-3">
         <p className="font-bold">Colors:</p>
         {product && product.colors.map((color)=>{
-         return <p className="bg-white capitalize font-semibold px-3 text-sm py-1 rounded-sm shadow-sm" key={color}>{color}</p>      
+         return <button type="button" className={`bg-white capitalize font-semibold px-3 text-sm py-1 rounded-sm shadow-sm`} key={color.code}>{color}</button>      
         })}
         </div>
 
@@ -94,7 +100,7 @@ const getProduct=async()=>{
         <div className="flex flex-wrap gap-3">
         <p className="font-bold">Storage:</p>
         { product.phoneStorage.map((item)=>{
-         return <p className="bg-white font-semibold px-3 text-sm py-1 rounded-sm shadow-sm" key={item}>{item} GB</p>      
+         return <button type="button" className={`bg-white capitalize font-semibold px-3 text-sm py-1 rounded-sm shadow-sm`} key={item}>{item} GB</button>      
         })}
         </div>
         </>):null}
@@ -125,7 +131,7 @@ const getProduct=async()=>{
         </div>
 
        <div className=" flex my-2 gap-3">
-        <button type="button" onClick={handleCart} className="font-semibold bg-[--primary] text-white border-2 border-[--primary] shadow-sm rounded-md px-3 py-1.5 hover:text-[--primary] hover:bg-white text-sm ">Add to Cart</button>
+        <button type="submit" onClick={clickAddToCart} className="font-semibold bg-[--primary] text-white border-2 border-[--primary] shadow-sm rounded-md px-3 py-1.5 hover:text-[--primary] hover:bg-white text-sm ">Add to Cart</button>
         <button type="button"  className="font-semibold  border-2 border-[--primary] shadow-sm rounded-md px-3 py-1.5 text-[--primary] bg-white text-sm ">Add Wishlist</button>
        </div>
        <samp className=" font-sans">

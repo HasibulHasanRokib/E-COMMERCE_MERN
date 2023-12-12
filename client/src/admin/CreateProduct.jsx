@@ -3,17 +3,17 @@ import { useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage'
 import { app } from '../components/FireBase'
-import { colors,clothSize,phoneStorage,shoesSize } from '../components/Objects'
+import { colors, clothSize, phoneStorage, shoesSize } from './Objects'
 
 const CreateProduct = () => {
 
   const [files, setFiles] = useState([])
   const [imageUploadError, setImageUploadError] = useState(false);
   const [upLoading, setUpLoading] = useState(false);
-  const [formData, setFormData] = useState({ title: "", description: "", regularPrice: 0, imageUrls: [], category:'',colors:[],phoneStorage:[],shoesSize:[],clothSize:[], discountPercentage: 0, rating: 0, brand: "", stock: 0, sold: 0 })
-  const [isLoading,setIsLoading]=useState(false)
-  const [isError,setIsError]=useState(false)
-  const [categories,setCategories]=useState()
+  const [formData, setFormData] = useState({ title: "", description: "", regularPrice: 0, imageUrls: [], category: '', colors: [], phoneStorage: [], shoesSize: [], clothSize: [], discountPercentage: 0, rating: 0, brand: "", stock: 0, sold: 0 })
+  const [isLoading, setIsLoading] = useState(false)
+  const [isError, setIsError] = useState(false)
+  const [categories, setCategories] = useState()
   const navigate = useNavigate()
 
   const handleImageUpload = () => {
@@ -63,17 +63,17 @@ const CreateProduct = () => {
 
   const handleChange = (e) => {
     const { id, value, type, checked } = e.target;
-  
+
     if (type === 'checkbox') {
       let updatedArray;
-  
+
       if (id === 'colors') {
         updatedArray = checked
           ? [...formData.colors, value]
           : formData.colors.filter((color) => color !== value);
 
       }
-       else if (id === 'phoneStorage') {
+      else if (id === 'phoneStorage') {
         updatedArray = checked
           ? [...formData.phoneStorage, value]
           : formData.phoneStorage.filter((storage) => storage !== value);
@@ -88,18 +88,18 @@ const CreateProduct = () => {
           ? [...formData.shoesSize, value]
           : formData.shoesSize.filter((size) => size !== value);
       }
-       else {
+      else {
         setFormData({ ...formData, [id]: value });
         return;
       }
-  
+
       setFormData({ ...formData, [id]: updatedArray });
     } else {
       setFormData({ ...formData, [id]: value });
     }
   };
 
-  
+
   const handleProductSubmit = async (e) => {
     e.preventDefault()
     try {
@@ -130,30 +130,30 @@ const CreateProduct = () => {
     setFormData({ ...formData, imageUrls: formData.imageUrls.filter((url, i) => i !== index) })
   }
 
-  const getCategories=async()=>{
+  const getCategories = async () => {
     try {
-      const res=await fetch(`${baseURL}/api/categories`,{
-      method:"GET",
-      credentials:"include"
-     }) 
-     const data= await res.json()
-     if(data.success===false){
-      setIsError(data.message)
-     }else{
-      setCategories(data.categories)
-     }   
+      const res = await fetch(`${baseURL}/api/categories`, {
+        method: "GET",
+        credentials: "include"
+      })
+      const data = await res.json()
+      if (data.success === false) {
+        setIsError(data.message)
+      } else {
+        setCategories(data.categories)
+      }
     } catch (error) {
-     console.log(error.message)
-     setIsError(data.message)
+      console.log(error.message)
+      setIsError(data.message)
     }
   }
-  
-  useEffect(()=>{
-  getCategories()
-  },[])
+
+  useEffect(() => {
+    getCategories()
+  }, [])
 
   return (
-    <main className='p-3 border-2 min-h-[80vh] my-3 rounded-md lg:w-[85vw] w-full'>
+    <main className='p-3'>
 
       <article className="border-b border-gray-900/10 pb-5">
         <h2 className="text-2xl font-semibold leading-7 text-[--primary]">Product Information</h2>
@@ -205,64 +205,64 @@ const CreateProduct = () => {
               <label className='font-semibold my-1' htmlFor="brand">Brand:</label>
               <input onChange={handleChange} className='p-1.5 rounded-md outline-[--primary] shadow-sm' type="text" name="brand" id="brand" />
             </span>
- 
-            <span className='flex flex-col'>
-            <label className='font-semibold mt-2' htmlFor="colors">Colors:</label>
-            <div className="flex flex-wrap gap-2 my-1">
-            {colors.map((item)=>{
-              return <span className='flex gap-1' key={item.id}>
-                <input onChange={handleChange} checked={formData.colors.includes(item.color)} value={item.color} className='w-4' type="checkbox" name={item.color} id='colors' />
-                <p className='capitalize text-sm'>{item.color}</p>
-              </span>
-            })}
-           </div>
-           </span>
 
-           {formData.category==='smart-phone'? (
-            <>
             <span className='flex flex-col'>
-            <label className='font-semibold mt-2' htmlFor="phoneStorage">Phone Storage:</label>
-            <div className="flex flex-wrap gap-2 my-1">
-            {phoneStorage.map((item)=>{
-              return <span className='flex gap-1' key={item.id}>
-                <input onChange={handleChange} checked={formData.phoneStorage.includes(item.storage)} value={item.storage} className='w-4' type="checkbox" name={item.storage} id='phoneStorage' />
-                <p className='capitalize text-sm'>{item.storage}GB</p>
-              </span>
-            })}
-           </div>
-           </span>  
-            </>
-           ):null}
-           {formData.category==='mens-clothing'? (
-            <>
-            <span className='flex flex-col'>
-            <label className='font-semibold mt-2' htmlFor="clothSize">Cloth Size:</label>
-            <div className="flex flex-wrap gap-2 my-1">
-            {clothSize.map((item)=>{
-              return <span className='flex gap-1' key={item.id}>
-                <input onChange={handleChange} checked={formData.clothSize.includes(item.size)} value={item.size} className='w-4' type="checkbox" name={item.size} id='clothSize' />
-                <p className='capitalize text-sm'>{item.size}</p>
-              </span>
-            })}
-           </div>
-           </span>  
-            </>
-           ):null}
-           {formData.category==='shoes'? (
-            <>
-            <span className='flex flex-col'>
-            <label className='font-semibold mt-2' htmlFor="shoesSize">Shoes Size:</label>
-            <div className="flex flex-wrap gap-2 my-1">
-            {shoesSize.map((item)=>{
-              return <span className='flex gap-1' key={item.id}>
-                <input onChange={handleChange} value={item.size}  className='w-4' type="checkbox" name={item.size} id='shoesSize' />
-                <p className='capitalize text-sm'>{item.size}</p>
-              </span>
-            })}
-           </div>
-           </span>  
-            </>
-           ):null}
+              <label className='font-semibold mt-2' htmlFor="colors">Colors:</label>
+              <div className="flex flex-wrap gap-2 my-1">
+                {colors.map((item) => {
+                  return <span className='flex gap-1' key={item.id}>
+                    <input onChange={handleChange} checked={formData.colors.includes(item.color)} value={item.color} className='w-4' type="checkbox" name={item.color} id='colors' />
+                    <p className='capitalize text-sm'>{item.color}</p>
+                  </span>
+                })}
+              </div>
+            </span>
+
+            {formData.category === 'smart-phone' ? (
+              <>
+                <span className='flex flex-col'>
+                  <label className='font-semibold mt-2' htmlFor="phoneStorage">Phone Storage:</label>
+                  <div className="flex flex-wrap gap-2 my-1">
+                    {phoneStorage.map((item) => {
+                      return <span className='flex gap-1' key={item.id}>
+                        <input onChange={handleChange} checked={formData.phoneStorage.includes(item.storage)} value={item.storage} className='w-4' type="checkbox" name={item.storage} id='phoneStorage' />
+                        <p className='capitalize text-sm'>{item.storage}GB</p>
+                      </span>
+                    })}
+                  </div>
+                </span>
+              </>
+            ) : null}
+            {formData.category === 'mens-clothing' ? (
+              <>
+                <span className='flex flex-col'>
+                  <label className='font-semibold mt-2' htmlFor="clothSize">Cloth Size:</label>
+                  <div className="flex flex-wrap gap-2 my-1">
+                    {clothSize.map((item) => {
+                      return <span className='flex gap-1' key={item.id}>
+                        <input onChange={handleChange} checked={formData.clothSize.includes(item.size)} value={item.size} className='w-4' type="checkbox" name={item.size} id='clothSize' />
+                        <p className='capitalize text-sm'>{item.size}</p>
+                      </span>
+                    })}
+                  </div>
+                </span>
+              </>
+            ) : null}
+            {formData.category === 'shoes' ? (
+              <>
+                <span className='flex flex-col'>
+                  <label className='font-semibold mt-2' htmlFor="shoesSize">Shoes Size:</label>
+                  <div className="flex flex-wrap gap-2 my-1">
+                    {shoesSize.map((item) => {
+                      return <span className='flex gap-1' key={item.id}>
+                        <input onChange={handleChange} value={item.size} className='w-4' type="checkbox" name={item.size} id='shoesSize' />
+                        <p className='capitalize text-sm'>{item.size}</p>
+                      </span>
+                    })}
+                  </div>
+                </span>
+              </>
+            ) : null}
           </div>
 
           <div className="flex flex-col p-3 gap-2  md:w-2/4 w-full">

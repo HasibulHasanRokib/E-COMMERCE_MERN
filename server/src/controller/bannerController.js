@@ -19,7 +19,7 @@ const handleAddBanner = async (req, res) => {
 }
 const handleGetBanner=async(req,res)=>{
     try {
-       const banners = await BannerModel.find().select({_id:0,createdAt:0,updatedAt:0})
+       const banners = await BannerModel.find()
        
        if(!banners){
         return res.status(404).json({success:false,message:"No banners added."})

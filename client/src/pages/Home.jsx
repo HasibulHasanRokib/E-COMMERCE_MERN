@@ -1,4 +1,4 @@
-import AdsSlider from "../components/Ads-Slider"
+import AdsSlider from "../components/Slider"
 import Category from "../components/Category"
 import NewArrivals from "../components/NewArrivals"
 import JustForYou from "../components/JustForYou"

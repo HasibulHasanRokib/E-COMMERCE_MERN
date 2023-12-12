@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react'
 import {baseURL} from '../App'
-import { AiOutlineSearch } from 'react-icons/ai'
+import { AiOutlineSearch,AiOutlineStop,AiOutlineDelete ,AiOutlineEdit } from 'react-icons/ai'
 import { Link } from 'react-router-dom'
+import { BsBagPlusFill, BsBagFill} from "react-icons/bs";
+import Spinner from '../components/Spinner';
+
 
 
 const AdminProducts = () => {
@@ -62,18 +65,33 @@ const handleProductDelete=async(id)=>{
 
 
   return (
-    <main className='p-3 border-2 md:min-h-[80vh] my-3 rounded-md lg:w-[85vw] max:w-10/12 max-md:pb-32'>
+    <main className='p-3'>
        <article className="border-b border-gray-900/10 pb-5">
           <h2 className="text-2xl font-semibold leading-7 text-[--primary]">Products Information</h2>
           <p className="mt-1 text-sm leading-6 text-gray-600">All products there.</p>
       </article>
 
-      <div className="">
+      <div className="grid grid-cols-3 gap-2">
+       <div className="bg-green-500 h-20 p-2 flex justify-center items-center gap-1 rounded shadow-sm">
+       <BsBagFill size={20} className='text-white'/>
+       <p className='font-semibold text-white'>Total Products ({products?.length})</p>
+       </div>
+       <div className="bg-sky-500 h-20 p-2 flex justify-center items-center gap-1 rounded shadow-sm">
+       <BsBagPlusFill size={20} className='text-white'/>
+       <p className='font-semibold text-white'>Total Categories (0)</p>
+       </div>
+       <div className="bg-red-500 h-20 p-2 flex justify-center items-center gap-1 rounded shadow-sm">
+       <AiOutlineStop size={20} className='text-white'/>
+       <p className='font-semibold text-white'>Out of Stock(0)</p>
+       </div>
+      </div>
+
+      {/* <div className="">
       <form className="flex items-center rounded my-2" onSubmit={handleSearch}>
         <input onChange={(e)=>setSearch(e.target.value)}  className="py-1.5 px-2 rounded-l outline-none  shadow-sm" type="search" name="search" id="search" placeholder="Search..." />
         <button type="submit"><AiOutlineSearch className="text-xl bg-gray-600 text-white w-9 h-9 p-1.5 rounded-r shadow-sm"/></button>
        </form>
-      </div>
+      </div> */}
 
       <section className=' border-b-2'>
       <table className='my-3 border w-full pb-4'>
@@ -106,15 +124,15 @@ const handleProductDelete=async(id)=>{
              <td className='border text-sm max-md:hidden'>{item.category}</td>
              <td className='border text-sm max-md:hidden'>{item.discountPercentage}%</td>
              <td className='border'>
-              <Link to={`/admin/update-product/${item._id}`} className='font-semibold text-sky-700 mx-4 text-sm' type="button">Edit</Link>
-              <button onClick={()=>handleProductDelete(item._id)} className='font-semibold text-red-600 text-sm' type="button">Delete</button>
+              <Link to={`/admin/update-product/${item._id}`} className='font-semibold text-sky-700 mx-4 text-sm' type="button"><AiOutlineEdit size={20}  /></Link>
+              <button onClick={()=>handleProductDelete(item._id)} className='font-semibold text-red-600 text-sm' type="button"><AiOutlineDelete size={20} /></button>
              </td>
             </tr>
           }) }
         </tbody>
       </table>
      </section>
-     {isLoading ? <h5 className='my-10 text-center font-bold text-sky-600'>Loading...</h5>:null}
+     {isLoading ? <h5 className='my-10 text-center font-bold '><Spinner/></h5>:null}
      {isError ? <h5 className='my-10 text-center font-semibold text-red-600 text-sm'>{isError}</h5>:null}
      <div className="flex py-2 justify-center items-center flex-col">
             <h5 className=" text-xs font-semibold">Showing {pageInfo?.currentPage} to {pageInfo?.totalPages} of {pageInfo?.count} Entries</h5>

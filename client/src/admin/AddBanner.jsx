@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { app } from "../components/FireBase";
 import { baseURL } from "../App";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const AddBanner = () => {
 
@@ -27,15 +28,43 @@ const AddBanner = () => {
         uploadTask.on('state-changed',(snapshot)=>{
           const process=(snapshot.bytesTransferred / snapshot.totalBytes)*100;
           setFilePer(Math.round(process))
+          setIsLoading(true)
         },
         (error)=>{
           setFileErr(error.message)
+          setIsLoading(false)
         },
         ()=>{getDownloadURL(uploadTask.snapshot.ref)
-        .then((downloadURL)=>setFormData({...formData,bannerImages:downloadURL}))
+        .then((downloadURL)=>setFormData({...formData,bannerImages:downloadURL}),setIsLoading(false))
         }
         )
      }
+
+
+     const getAllBanner=async()=>{
+      try {
+        setIsLoading(true)
+        const res=await fetch(`${baseURL}/api/banner`,{
+          method:"GET",
+          credentials:"include"
+        })
+        const data=await res.json()
+        if(data.success===true){
+        setIsLoading(false)
+        setBanners(data.banners)
+        }else{
+        setIsLoading(false)
+        setIsError(data.message)
+        }
+      } catch (error) {
+        setIsError(error.message)
+        setIsLoading(false)
+      }
+    }
+
+    useEffect(()=>{
+    getAllBanner();
+    },[])
 
 
      const handleBannerSubmit=async(e)=>{
@@ -54,7 +83,9 @@ const AddBanner = () => {
                 setIsError(data.message)
               }else{
                 setIsLoading(false)
-                navigate('/')
+                getAllBanner()
+                toast.success(data.message)
+                setFormData({bannerImages:""})
               }
             } catch (error) {
               setIsLoading(false)
@@ -62,30 +93,7 @@ const AddBanner = () => {
             }
       }
       
-      const getAllBanner=async()=>{
-        try {
-          setIsLoading(true)
-          const res=await fetch(`${baseURL}/api/banner`,{
-            method:"GET",
-            credentials:"include"
-          })
-          const data=await res.json()
-          if(data.success===true){
-          setIsLoading(false)
-          setBanners(data.banners)
-          }else{
-          setIsLoading(false)
-          setIsError(data.message)
-          }
-        } catch (error) {
-          setIsError(error.message)
-          setIsLoading(false)
-        }
-      }
 
-      useEffect(()=>{
-      getAllBanner();
-      },[])
 
       const handleBannerDelete=async(id)=>{
         try {
@@ -93,14 +101,22 @@ const AddBanner = () => {
           method:"DELETE",
           credentials:"include"
          })
-         const data = await res.json()        
+         const data = await res.json() 
+         if(data.success===true){
+          toast.success(data.message)
+          getAllBanner()
+         }else{
+          toast.error(data.message)
+         }      
         } catch (error) {
           setIsError(error.message)
         }
       }
 
+    
+
   return (
-    <div className="p-3 border-2 md:min-h-[80vh] my-3 rounded-md lg:w-[85vw] w-full">
+    <div className="p-3">
     <article className="border-b border-gray-900/10 pb-5">
           <h2 className="text-2xl font-semibold leading-7 text-[--primary]">Add Banner Information</h2>
           <p className="mt-1 text-sm leading-6 text-gray-600">Add products banner there.</p>
@@ -112,7 +128,7 @@ const AddBanner = () => {
       <p className='my-1 text-xs text-[--primary]'>*First upload the image then save the banner . (max 1)</p>
       <div className=" border p-2 shadow-sm rounded flex justify-between items-center">
         <input onChange={(e) => setFile(e.target.files[0])}  type="file" id='bannerImages' name='bannerImages' accept="image/*" />  
-        <button  onClick={()=>handleImageUpload(file)} className='p-2 font-semibold border border-[--primary] rounded bg-[--primary] text-white  uppercase hover:opacity-80' type='button'>Upload</button>
+        <button  onClick={()=>handleImageUpload(file)} className='p-2 font-semibold border border-[--primary] rounded bg-[--primary] text-white  uppercase hover:opacity-80' type='button'>{isLoading ? "Loading...":"upload"}</button>
       </div>
       <div className="my-2">{fileErr ? (<p className="text-xs text-red-500">Uploading failed</p>):filePer > 0 && filePer <100 ? (<p className="text-blue-600 text-xs">{`Uploading ${filePer}%`}</p>):filePer===100 ? (<p className="text-green-600 text-xs">Upload successful</p>):''}</div>  
                     
@@ -120,7 +136,7 @@ const AddBanner = () => {
            formData && formData.bannerImages.length > 0 && (
               <div className="border rounded-md px-2 py-3 flex justify-between items-center my-1 shadow-sm bg-white">
               <img className="w-20 h-10 object-contain" src={formData.bannerImages} alt="product image" />
-              <button type="button" className="uppercase text-red-600 text-sm px-2 font-semibold">Delete</button>
+              <button type="button" onClick={()=>setFormData({bannerImages:""})} className="uppercase text-red-600 text-sm px-2 font-semibold">Delete</button>
               </div>
             )
         }
