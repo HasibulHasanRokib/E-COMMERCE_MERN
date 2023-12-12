@@ -1,15 +1,12 @@
 import {FaSistrix,FaCartShopping,FaCircleUser,FaHeart} from "react-icons/fa6"
 import {  useSelector } from "react-redux"
-import { Link, useSearchParams} from "react-router-dom"
+import { Link,} from "react-router-dom"
 import { AiOutlineAppstore  } from "react-icons/ai";
 import { useContext } from "react";
 import { productsContext } from "../context/productContext";
 
 const Navbar = () => {
 const {currentUser}=useSelector((state)=>state.user)
-const {products}=useSelector((state)=>state.cart)
-const {searchQuery,setSearchQuery}=useContext(productsContext)
-
 
 const handleSubmit=(e)=>{
  e.preventDefault()
@@ -64,7 +61,7 @@ const handleSubmit=(e)=>{
 
           <ul className="flex md:gap-4 items-center max-md:hidden">
           <li title="Cart" className=" relative">
-          <Link to={'/cart'}><FaCartShopping className="text-2xl mx-3"/>{currentUser===null?"" : products.length === 0 ?"":<div className="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -end-2 dark:border-gray-900">{products.length}</div> }</Link>
+          <Link to={'/cart'}><FaCartShopping className="text-2xl mx-3"/>{currentUser===null?"" : <div className="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -end-2 dark:border-gray-900">10</div> }</Link>
           </li>
 
           <li title="WhishList">
