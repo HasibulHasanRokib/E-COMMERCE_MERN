@@ -1,13 +1,15 @@
 import {baseURL} from '../App'
 import { useEffect, useState } from 'react'
-import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage'
 import { app } from '../components/FireBase'
 import { toast } from 'react-toastify'
 import Spinner from '../components/Spinner'
-import {AiOutlineDelete ,AiOutlineEdit } from 'react-icons/ai'
+import {AiOutlineDelete} from 'react-icons/ai'
+import AdminHeader from './AdminHeader'
+import CategoryTable from './CategoryTable'
+import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage'
 
 
-const CreateCategory = () => {
+const AdminCategory = () => {
    
   const [file,setFile]=useState()
   const [fileParse,setFileParse]=useState(0) 
@@ -149,35 +151,12 @@ const CreateCategory = () => {
   return (
     <>
     <section className="p-3">
-    <article className="border-b border-gray-900/10 pb-5">
-          <h2 className="text-2xl font-semibold leading-7 text-[--primary]">Category Information</h2>
-          <p className="mt-1 text-sm leading-6 text-gray-600">All create category there.</p>
-    </article>
+    <AdminHeader title={'Category Information'} subTitle={'All create category there.'}/>
     <div className="flex max-md:flex-col-reverse">
     <div className='p-4 md:w-[50%]'>
-      <table className='border w-full'>
-        <thead>
-          <tr>
-            <th className='p-3 border'>#</th>
-            <th className='p-3 border'>Name</th>
-            <th className='p-3 border'>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {categories && categories.map((item,index)=>{
-            return <tr key={index}>
-              <td className='px-3 border'><img className='w-8' src={item?.categoryImage} alt="" /></td>
-              <td className='p-3 border capitalize'>{item?.name}</td>
-              <td className='p-3  flex justify-around border'>
-                <button className='font-semibold text-sky-700' onClick={()=>updateCategoryData(item)} type="button"><AiOutlineEdit size={25}/></button>
-                <button onClick={()=>handleDeleteCategory(item._id)} className='font-semibold text-red-700' type="button"><AiOutlineDelete size={25}/></button>
-             </td>
-            </tr>
-          })}
-        </tbody>
-      </table>
+    <CategoryTable categories={categories} updateCategoryData={updateCategoryData} handleDeleteCategory={handleDeleteCategory}/>
      {isLoading ? <h5 className='my-10 text-center font-bold text-sky-600'><Spinner/></h5>:null}
-    </div> 
+    </div>     
     <form className='flex  flex-col px-3 py-2 md:w-[50%]' onSubmit={isUpdate ? handleUpdate:handleSubmit}>
       <label className='font-bold py-2 text-[--primary]' htmlFor="category">Add Category</label>
       <p className='my-1 text-xs text-[--primary]'>*First upload the image then save the category . (max 1)</p>
@@ -207,4 +186,4 @@ const CreateCategory = () => {
   )
 }
 
-export default CreateCategory
+export default AdminCategory

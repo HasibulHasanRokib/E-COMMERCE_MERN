@@ -3,7 +3,7 @@ import Sidebar from "../admin/Sidebar"
 
 const AdminLayout = () => {
   return (
-    <main className=" grid grid-cols-6">   
+    <main className=" grid md:grid-cols-6 grid-cols-1">   
       <Sidebar />
       <div className="col-span-5">
       <Outlet />

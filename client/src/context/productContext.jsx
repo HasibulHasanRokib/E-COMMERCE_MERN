@@ -7,6 +7,13 @@ export const productsContext=React.createContext()
 const ProductsProvider=({children})=>{
 
     const [products,setProducts]=useState([])
+    const [cartItems,setCartItems]=useState([])
+
+
+    const addToCart=(items)=>{
+        console.log(items)
+    setCartItems([...cartItems,items])
+    }
 
 
     useEffect(()=>{
@@ -43,7 +50,7 @@ const ProductsProvider=({children})=>{
      }
 
 
-    return <productsContext.Provider value={{filterProducts,setSearchQuery,searchQuery,setCategory,category,setPriceOptions,priceOptions}}>
+    return <productsContext.Provider value={{filterProducts,setSearchQuery,searchQuery,setCategory,category,setPriceOptions,priceOptions,addToCart,cartItems}}>
        {children}
     </productsContext.Provider>
 }

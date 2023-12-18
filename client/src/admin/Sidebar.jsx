@@ -11,7 +11,7 @@ setSelected(item)
 
   return (
     <>
-    <section className="min-h-screen border-r-2">
+    <section className="min-h-screen border-r-2 max-md:hidden">
         <ul className="flex flex-col gap-2  mt-4">
            <li className={`${selected==='products' ? 'bg-[--primary] text-white rounded-lg':null}text-sm hover:bg-[--primary] hover:text-white py-1.5 px-4 `} onClick={()=>handleClick('products')}><Link className="flex items-center gap-2" to={'/admin/products'}><BsBagFill className=" text-2xl"/>Products</Link></li>          
            <li className={`${selected==='category' ? 'bg-[--primary] text-white rounded-lg':null}text-sm hover:bg-[--primary] hover:text-white py-1.5 px-4`} onClick={()=>handleClick('category')}><Link className="flex  items-center gap-2" to={'/admin/create-category'}><BsCartPlusFill className=" text-2xl"/>Create Category</Link></li>          

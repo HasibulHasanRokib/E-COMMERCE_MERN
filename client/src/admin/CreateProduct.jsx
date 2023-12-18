@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react'
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage'
 import { app } from '../components/FireBase'
 import { colors, clothSize, phoneStorage, shoesSize } from './Objects'
+import { useDispatch, useSelector } from 'react-redux'
+import { newProduct } from '../features/product/productSlice'
 
 const CreateProduct = () => {
 
@@ -15,6 +17,11 @@ const CreateProduct = () => {
   const [isError, setIsError] = useState(false)
   const [categories, setCategories] = useState()
   const navigate = useNavigate()
+  const dispatch = useDispatch()
+
+  console.log()
+
+  const { product } = useSelector((state) => state.product)
 
   const handleImageUpload = () => {
     if (files.length > 0 && files.length + formData.imageUrls.length < 6) {
@@ -99,31 +106,34 @@ const CreateProduct = () => {
     }
   };
 
-
   const handleProductSubmit = async (e) => {
     e.preventDefault()
-    try {
-      setIsLoading(true)
-      const res = await fetch(`${baseURL}/api/create-product`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-        credentials: "include"
-      })
-      const data = await res.json()
+    dispatch(newProduct(formData))
+    navigate(`/admin/products`)
 
-      if (data.success === false) {
-        setIsError(data.message)
-        setIsLoading(false)
-      } else {
-        navigate(`/product/${data.newProduct.slug}`)
-        setIsLoading(false)
-      }
 
-    } catch (error) {
-      setIsLoading(false)
-      setIsError(error.message)
-    }
+    // try {
+    //   setIsLoading(true)
+    //   const res = await fetch(`${baseURL}/api/create-product`, {
+    //     method: "POST",
+    //     headers: { "Content-Type": "application/json" },
+    //     body: JSON.stringify(formData),
+    //     credentials: "include"
+    //   })
+    //   const data = await res.json()
+
+    //   if (data.success === false) {
+    //     setIsError(data.message)
+    //     setIsLoading(false)
+    //   } else {
+    //     navigate(`/product/${data.newProduct.slug}`)
+    //     setIsLoading(false)
+    //   }
+
+    // } catch (error) {
+    //   setIsLoading(false)
+    //   setIsError(error.message)
+    // }
   }
 
   const handleDeleteImage = (index) => {
@@ -151,6 +161,8 @@ const CreateProduct = () => {
   useEffect(() => {
     getCategories()
   }, [])
+
+
 
   return (
     <main className='p-3'>

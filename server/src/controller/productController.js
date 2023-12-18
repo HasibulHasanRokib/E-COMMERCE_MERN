@@ -34,22 +34,14 @@ const handleCreateProduct =async (req, res) => {
 const handleGetProducts=async(req,res)=>{
     try {
         const search = req.query.search || '';
-        const page = Number(req.query.page) || 1;
-        const limit = Number(req.query.limit) || 100;
-
         const searchRegExp = new RegExp('.*' + search + '.*', 'i')
       
-
         const filter = {  
             $or:[
                 { title: { $regex: searchRegExp }, }
-            ]                   
-        }
-
-        const products = await ProductModel.find(filter).limit(limit).skip((page - 1) * limit)
-
-        const count = await ProductModel.find(filter).countDocuments()
-
+            ]  
+        }                 
+        const products = await ProductModel.find(filter)
         if (products.length===0) {
             return res.status(404).json({ success: false, message: "No products found." })
         }
@@ -58,13 +50,6 @@ const handleGetProducts=async(req,res)=>{
             success: true,
             message: 'Products were return.',
             products,
-            pagination: {
-                totalPages: Math.ceil(count / limit),
-                count,
-                currentPage: page,
-                previousPage: page - 1 > 0 ? page - 1 : null,
-                nextPage: page + 1 <= Math.ceil(count / limit) ? page + 1 : null
-            }
         })
 
     } catch (error) {
@@ -163,7 +148,7 @@ const handleDeleteProduct = async (req, res) => {
 
 const handleNewArrivals=async(req,res)=>{
     try {
-        const newArrivals = await ProductModel.find({}).sort({ createdAt: -1 }).limit(7);
+        const newArrivals = await ProductModel.find({}).sort({ createdAt: -1 }).limit(12);
 
         res.status(200).json({
             success: true,

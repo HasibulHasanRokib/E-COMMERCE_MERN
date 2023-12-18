@@ -34,7 +34,7 @@ const Category = () => {
 
     return (
         <section>
-            <h2 className="text-lg font-semibold md:px-5 capitalize py-2">Category list</h2>
+            <h2 className="text-lg font-semibold md:px-5 capitalize p-2">Category list</h2>
             <div className=" grid grid-cols-4 lg:grid-cols-8 md:px-4">
                 {categories && categories.map((item) => {
                     return <button type="button" onClick={() => handleClick(item.slug)} key={item._id} className="bg-gray-50 shadow-sm border rounded-sm p-2 flex flex-col justify-center items-center">

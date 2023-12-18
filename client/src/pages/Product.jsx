@@ -1,7 +1,10 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AiFillStar,} from "react-icons/ai";
 import {useParams} from 'react-router-dom'
 import {baseURL} from '../App'
+import { productsContext } from "../context/productContext";
+import { useDispatch, useSelector } from "react-redux";
+import { ADD_TO_CART } from "../features/cartSlice";
 
 
 const Product = () => {
@@ -9,9 +12,10 @@ const [product,setProduct]=useState()
 const [isLoading,setIsLoading]=useState(false)
 const [isError,setIsError]=useState(false)
 const [imageIndex,setImageIndex]=useState(0)
-const [count,setCount]=useState(1)
+const [quantity,setQuantity]=useState(1)
 const {slug} = useParams()
 
+const dispatch=useDispatch()
 
 const getProduct=async()=>{
   try {
@@ -37,27 +41,10 @@ const getProduct=async()=>{
   getProduct()
  },[])
 
-
- const clickAddToCart=async()=>{
-  if(product){
-    const {_id:productId,regularPrice}=product;
-    try {
-      const res= await fetch(`${baseURL}/api/cart/add-cart`,{
-        method:"POST",
-        headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({productId,quantity:count}),
-        credentials:"include"
-      })
-      const data= await res.json()
-      if(data.success===true){
-        console.log(data.message)
-      }
-    } catch (error) {
-      console.log(error.message)
-    }
-  }
+ const handleAddToCart=(product)=>{
+ dispatch(ADD_TO_CART(product))
  }
- 
+
 
   return (
     <>
@@ -67,7 +54,7 @@ const getProduct=async()=>{
       <img className="w-[25rem] h-[20rem] object-contain" src={product?.imageUrls[imageIndex]} alt="" />
       </div>
 
-      <div className="mt-5">
+    <div className="mt-5">
       {product && product.imageUrls.map((item,index)=>{
         return <button onClick={()=>setImageIndex(index)} key={index} className="w-20 mx-3 shadow-sm"><img src={item} alt="" /></button>
       })}
@@ -125,19 +112,19 @@ const getProduct=async()=>{
 
 
         <div className="my-3">
-         <button disabled={count>=product?.stock?true:false}  onClick={()=>setCount(count+1)} className="p-1 border-2  w-10 hover:bg-[--primary] hover:text-white font-bold mr-2 shadow-sm">+</button>
-         <samp>{count}</samp>             
-         <button disabled={count<=1?true:false}  onClick={()=>setCount(count-1)} className="p-1 border-2  w-10 hover:bg-[--primary] hover:text-white font-bold m-2 shadow-sm">-</button>
+         <button disabled={quantity>=product?.stock?true:false}  onClick={()=>setQuantity(quantity+1)} className="p-1 border-2  w-10 hover:bg-[--primary] hover:text-white font-bold mr-2 shadow-sm">+</button>
+         <samp>{quantity}</samp>             
+         <button disabled={quantity<=1?true:false}  onClick={()=>setQuantity(quantity-1)} className="p-1 border-2  w-10 hover:bg-[--primary] hover:text-white font-bold m-2 shadow-sm">-</button>
         </div>
 
        <div className=" flex my-2 gap-3">
-        <button type="submit" onClick={clickAddToCart} className="font-semibold bg-[--primary] text-white border-2 border-[--primary] shadow-sm rounded-md px-3 py-1.5 hover:text-[--primary] hover:bg-white text-sm ">Add to Cart</button>
+        <button type="submit" onClick={()=>handleAddToCart(product)} className="font-semibold bg-[--primary] text-white border-2 border-[--primary] shadow-sm rounded-md px-3 py-1.5 hover:text-[--primary] hover:bg-white text-sm ">Add to Cart</button>
         <button type="button"  className="font-semibold  border-2 border-[--primary] shadow-sm rounded-md px-3 py-1.5 text-[--primary] bg-white text-sm ">Add Wishlist</button>
        </div>
        <samp className=" font-sans">
         <h2 className="font-bold text-2xl my-2">Description</h2>
         <p>{product?.description}</p>
-       </samp>      
+       </samp>    
       </section>
     </main>           
     </>
